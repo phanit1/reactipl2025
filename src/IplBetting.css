@@ -1,0 +1,108 @@
+/* General Styling */
+body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(to right, #141e30, #243b55);
+    /* color: white; */
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+  
+/* Betting Container */
+.betting-container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 25px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    text-align: center;
+}
+  
+/* Headings */
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #f8d90f;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+  
+/* Labels */
+label {
+    font-size: 16px;
+    font-weight: bold;
+    display: block;
+    margin: 10px 0 5px;
+    text-align: left;
+    color: #ddd;
+}
+  
+/* Select Dropdown */
+select {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 16px;
+    outline: none;
+    appearance: none;
+}
+
+select option {
+    background: #141e30;
+    color: white;
+}
+  
+/* Input Fields */
+input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+  
+/* Buttons */
+button {
+    width: 100px;
+    padding: 10px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    background: #f8d90f;
+    color: black;
+    font-weight: bold;
+}
+  
+button:hover {
+    background: #ffcc00;
+    transform: scale(1.05);
+}
+  
+/* Toss Buttons */
+.selected {
+    background-color: #f8d90f !important;
+    color: #141e30 !important;
+    font-weight: bold;
+    border: 2px solid #141e30;
+}
+  
+/* Responsive */
+@media (max-width: 500px) {
+    .betting-container {
+        width: 90%;
+        padding: 20px;
+    }
+}

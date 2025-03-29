@@ -1,0 +1,44 @@
+/* General styles for the App */
+.App {
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+/* Header for the navigation bar */
+.header {
+  background-color: #333;
+  color: white;
+  padding: 15px 0;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+/* Style for individual tabs */
+.tab {
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+/* Style for active tab */
+.tab.active {
+  background-color: #e91e63;
+  color: white;
+}
+
+/* Hover effect for tabs */
+.tab:hover {
+  background-color: #555;
+  color: white;
+}
+
+/* Main content container */
+.content {
+  margin-top: 30px;
+  padding: 20px;
+}

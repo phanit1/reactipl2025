@@ -1,0 +1,59 @@
+/* App.css */
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+  }
+  
+  .app {
+    padding: 20px;
+  }
+  
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .heading {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .points-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .points-table th,
+  .points-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .points-table thead {
+    background-color: #e0e0e0;
+  }
+  
+  .team-cell {
+    display: flex;
+    /* align-items: center;
+    justify-content: center; */
+  }
+  
+  .team-logo {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+  
+  .points {
+    font-weight: bold;
+  }
+  
