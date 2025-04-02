@@ -32,7 +32,7 @@ function App() {
     async function fetchIPL2025Matches() {
       try {
         const response = await fetch(
-          'https://www.cricbuzz.com/cricket-series/9237/indian-premier-league-2025/matches'
+          'http://localhost:5000/api/iplmatches'
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -182,10 +182,10 @@ useEffect(() => {
 
       {/* Conditional Rendering based on selected tab */}
       <main className="content">
-        {selectedTab === "schedule" && <IplSchedule schedule={schedule} />}
+        {selectedTab === "schedule" && schedule && <IplSchedule schedule={schedule} />}
         {selectedTab === "points" && <IplPointsTable />}
-        {selectedTab === "prediction" && <IPLPrediction matches={matches} />}
-        {selectedTab === "betting" && <IplBetting matches={presentMatches} />}
+        {selectedTab === "prediction" && matches && <IPLPrediction matches={matches} />}
+        {selectedTab === "betting" && presentMatches && <IplBetting matches={presentMatches} />}
       </main>
     </div>
   );

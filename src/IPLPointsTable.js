@@ -8,7 +8,7 @@ const IplPointsTable = () => {
       const fetchPointsTable = async () => {
         try {
           const response = await fetch(
-            'https://www.cricbuzz.com/cricket-series/9237/indian-premier-league-2025/points-table'
+            'http://localhost:5000/api/iplpoints'
           );
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
