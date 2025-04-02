@@ -8,7 +8,7 @@ const IplPointsTable = () => {
       const fetchPointsTable = async () => {
         try {
           const response = await fetch(
-            'http://localhost:5000/api/iplpoints'
+            'https://reactipl2025backend.vercel.app/api/iplpoints'
           );
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
