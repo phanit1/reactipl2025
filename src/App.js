@@ -7,87 +7,127 @@ import "./App.css";
 
 function App() {
   const [selectedTab, setSelectedTab] = useState(); // Default tab
-  const [matchResults, setMatchResults] = useState(null);
   const [schedule, setSchedule] = useState(null);
   const [pointsTable, setPointsTable] = useState(null);
   const [matches, setMatches] = useState([]);
   const [presentMatches, setPresentMatches] = useState([]);
 
-  // Fetch match results
-  useEffect(() => {
-    fetch('https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/stats/2025-matchlinks.js?callback=onMatchLinksBySeason&_=1742887208369')
-      .then((response) => response.text())
-      .then((data) => {
-        const jsonData = JSON.parse(String(data).replace('onMatchLinks(', '').replace(');', '')); // handle the callback format
-        setMatchResults(jsonData);
-      })
-      .catch((error) => console.error('Error fetching match results:', error));
-  }, []);
+//   // Fetch match schedule
+//   useEffect(() => {
+//     (async () => {
+//       try {
+//         const response = await fetch("https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/203-matchschedule.js?MatchSchedule=_jqjsp&_1742886894491");
+//         const result = await response.text();
+//         const jsonString = result.replace(/^MatchSchedule\(/, "").replace(/\);$/, "");
+//         const jsonData = JSON.parse(jsonString);
+//         setSchedule(jsonData.Matchsummary || []);
+//       } catch (error) {
+//         console.log('error', error);
+//       }
+//     })();
+//   }, []);
+  
 
-  // Fetch match schedule
   useEffect(() => {
-    (async () => {
+    async function fetchIPL2025Matches() {
       try {
-        const response = await fetch("https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/203-matchschedule.js?MatchSchedule=_jqjsp&_1742886894491");
-        const result = await response.text();
-        const jsonString = result.replace(/^MatchSchedule\(/, "").replace(/\);$/, "");
-        const jsonData = JSON.parse(jsonString);
-        setSchedule(jsonData.Matchsummary || []);
-      } catch (error) {
-        console.log('error', error);
-      }
-    })();
-  }, []);
-  // ✅ Use `useEffect` to handle state update after setting prediction
-  // useEffect(() => {
-  //   if (schedule) {
-  //     let pred = [];
-  //     let presentMatches = [];
-  //     // console.log("Schedule Content:", schedule);
-  //     for (let index = 0; index < schedule.length; index++) {
-  //       const element = schedule[index];
-  //       const matchElement = schedule[index].MatchName;
-  //       // console.log("element", element);
-  //       let date = new Date();
-  //       let formattedDate = date.toISOString().split("T")[0];
-  //       console.log(formattedDate);
-  //       // Output: "2025-05-25" (or current date)
+        const response = await fetch(
+          'https://www.cricbuzz.com/cricket-series/9237/indian-premier-league-2025/matches'
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const html = await response.text();
 
-  //       if (element.MatchStatus === "UpComing" && element.MatchDate === formattedDate) {
-  //         presentMatches.push(element);
-  //       }
-  //       pred.push(matchElement);
-  //     }
-  //     // for (let index = 0; index < schedule.length; index++) {
-  //     //   const element = schedule[index].MatchName;
-  //     //   pred.push(element);
-  //     // }
-  //     if (pred.length !== 0) {
-  //       setMatches(pred);
-  //     }
-  //     if (presentMatches.length !== 0) {
-  //       console.log("presentMatches", presentMatches);
-  //       setPresentMatches(presentMatches);
-  //     }
-  //     // setPresentMatches(presentMatches);
-  //   }
-  // }, [schedule]);
-  // Fetch points table
-  useEffect(() => {
-    fetch('https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/stats/203-groupstandings.js?ongroupstandings=_jqjsp&_1742887309430=')
-      .then((response) => response.text())
-      .then((data) => {
-        const jsonData = JSON.parse(data.replace(/^ongroupstandings\(/, "").replace(/\);$/, "")); // handle the callback format
-        setPointsTable(jsonData);
-      })
-      .catch((error) => console.error('Error fetching points table:', error));
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        const matchElements = doc.querySelectorAll('.cb-series-matches');
+        const scheduleData = [];
+
+        matchElements.forEach((matchElement) => {
+          console.log('matchElement', matchElement);
+          const dateElement = matchElement.querySelector('[ng-bind*="date:"]');
+          const dateTimestamp = dateElement
+            ? dateElement.getAttribute('ng-bind').match(/\d+/)[0]
+            : null;
+
+          const timeElement = matchElement.querySelector('[timestamp]');
+          const timeTimestamp = timeElement ? timeElement.getAttribute('timestamp') : null;
+
+          if (!dateTimestamp || !timeTimestamp) {
+            return null;
+          }
+
+          const date = new Date(parseInt(dateTimestamp));
+          const time = new Date(parseInt(timeTimestamp));
+
+          const options = {
+            month: 'short',
+            day: 'numeric',
+            weekday: 'short',
+          };
+          const formattedDate = date.toLocaleDateString('en-US', options);
+          console.log('formattedDate', formattedDate);
+          const timeOptions = {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+          };
+          const formattedTime = time.toLocaleTimeString('en-US', timeOptions);
+          console.log('formattedTime', formattedTime);
+
+          const matchDetailsElement = matchElement.querySelector('.cb-srs-mtchs-tm a span');
+          const matchDetails = matchDetailsElement ? matchDetailsElement.textContent.trim() : null;
+
+          const venueElement = matchElement.querySelector('.cb-srs-mtchs-tm .text-gray');
+          const venue = venueElement ? venueElement.textContent.trim() : null;
+
+          const resultElement = matchElement.querySelector('.cb-text-complete');
+          const result = resultElement ? resultElement.textContent.trim() : null;
+
+          if (matchDetails) {
+            scheduleData.push({
+              date: formattedDate,
+              matchDetails,
+              venue,
+              result,
+              time: formattedTime,
+            });
+          }
+        });
+
+        const ipl2025Matches = scheduleData.map((match) => {
+          const teams = match.matchDetails.split(' vs ');
+          const matchNumber = teams[1].split(",")[1].trim();
+          return {
+            date: match.date,
+            team1: teams[0],
+            team2: teams[1].split(",")[0].trim(),
+            matchNumber: matchNumber,
+            venue: match.venue,
+            time: match.time,
+            status: match.result || 'Upcoming',
+          };
+        }
+        );
+        // console.log('ipl2025Matches', ipl2025Matches);
+        setSchedule(ipl2025Matches);
+        // setLoading(false);
+      } catch (err) {
+        // setError(err);
+        // setLoading(false);
+      }
+    }
+
+    fetchIPL2025Matches();
   }, []);
 
   useEffect(() => {
     if (schedule) {
       let pred = [];
       for (let index = 0; index < schedule.length; index++) {
-        const element = schedule[index].MatchName;
+        const element = schedule[index].team1 + " vs " + schedule[index].team2+","+schedule[index].status+","+schedule[index].venue;
         pred.push(element);
       }
       setMatches(pred);    }
@@ -108,25 +148,6 @@ useEffect(() => {
     setPresentMatches(presentMatches);
       }
 }, [schedule]);
-
-  // useEffect(() => {
-    
-
-  // }, [schedule]);
-
-  // useEffect(() => {
-  //   let presentMatches = [];
-
-  //   for (let index = 0; index < schedule.length; index++) {
-  //     const element = schedule[index];
-  //     console.log("element", element);
-  //     let formattedDate = new Date().toISOString().split("T")[0];
-  //     if (element.MatchStatus === "UpComing" && element.MatchDate === formattedDate) {
-  //       presentMatches.push(element);
-  //     }
-  //   }
-  //   setPresentMatches(presentMatches);
-  // }, [presentMatches]);
 
   return (
     <div className="App">
@@ -162,7 +183,7 @@ useEffect(() => {
       {/* Conditional Rendering based on selected tab */}
       <main className="content">
         {selectedTab === "schedule" && <IplSchedule schedule={schedule} />}
-        {selectedTab === "points" && <IplPointsTable points={pointsTable} />}
+        {selectedTab === "points" && <IplPointsTable />}
         {selectedTab === "prediction" && <IPLPrediction matches={matches} />}
         {selectedTab === "betting" && <IplBetting matches={presentMatches} />}
       </main>

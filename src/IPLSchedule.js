@@ -2,7 +2,6 @@ import React from "react";
 import "./IplSchedule.css"; // Include CSS for styling
 
 const IplSchedule = (data) => {
-    // console.log("data", data);
     return (
         <div className="ipl-schedule-container scrollable-container">
             <h1 className="schedule-title">IPL 2025 Match Schedule</h1>
@@ -10,16 +9,14 @@ const IplSchedule = (data) => {
                 {data.schedule.map((match, index) => (
                     <div key={index} className="match-card">
                         <div className="team-names">
-                        <img src = {match.AwayTeamLogo} alt = {match.Team1Code} />
-                        <img src = {match.HomeTeamLogo} alt = {match.Team2Code} />
+                        <img src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGk7pa6BHgPjWQ29pZFX24vis44K07c0WJig&s" alt = {match.Team1Code} />
+                        <img src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGk7pa6BHgPjWQ29pZFX24vis44K07c0WJig&s" alt = {match.Team2Code} />
                         </div>
-                        <h3>{match.MatchName}</h3>
-                        <p><strong>Date:</strong> {new Date(match.GMTMatchDate).toLocaleDateString()}</p>
-                        <p><strong>Venue:</strong> {match.GroundName}</p>
-                        <p><strong>Time:</strong> {match.MatchTime}</p>
-                        <p><strong>Result:</strong>
-                            {match.MatchStatus === "UpComing" ? "Not played yet" : match.Comments}
-                        </p>
+                        <h3>{match.team1} vs {match.team2}</h3>
+                        <p><strong>Date:</strong> {match.date}</p>
+                        <p><strong>Venue:</strong> {match.venue}</p>
+                        <p><strong>Time:</strong> {match.time}</p>
+                        <p><strong>Result:</strong>{match.status}</p>
                     </div>
                 ))}
             </div>
