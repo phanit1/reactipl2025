@@ -32,7 +32,7 @@ function App() {
     async function fetchIPL2025Matches() {
       try {
         const response = await fetch(
-          'http://localhost:5000/api/iplmatches'
+          'https://reactipl2025backend.vercel.app/api/iplmatches'
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
