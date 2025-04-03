@@ -4,13 +4,14 @@ import IplPointsTable from "./IPLPointsTable";
 import IPLPrediction from "./IPLPrediction";
 import IplBetting from "./IplBetting";
 import "./App.css";
+import { format, parse } from 'date-fns';
 
 function App() {
   const [selectedTab, setSelectedTab] = useState(); // Default tab
   const [schedule, setSchedule] = useState(null);
   const [pointsTable, setPointsTable] = useState(null);
   const [matches, setMatches] = useState([]);
-  const [presentMatches, setPresentMatches] = useState([]);  
+  const [presentMatches, setPresentMatches] = useState([]);
 
   useEffect(() => {
     async function fetchIPL2025Matches() {
@@ -33,12 +34,12 @@ function App() {
   }, []);
 
   useEffect(() => {
-    async function fetchPointsTable() { 
+    async function fetchPointsTable() {
       try {
         const response = await fetch(
-          'https://reactipl2025backend.vercel.app/api/iplpointstable'  
+          'https://reactipl2025backend.vercel.app/api/iplpointstable'
         );
-        if (!response.ok) {   
+        if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
@@ -55,26 +56,33 @@ function App() {
     if (schedule) {
       let pred = [];
       for (let index = 0; index < schedule.length; index++) {
-        const element = schedule[index].team1 + " vs " + schedule[index].team2+","+schedule[index].status+","+schedule[index].venue;
+        const element = schedule[index].team1 + " vs " + schedule[index].team2 + "," + schedule[index].status + "," + schedule[index].venue;
         pred.push(element);
       }
-      setMatches(pred);    }
-}, [schedule]);
-
-useEffect(() => {
-  if (schedule) {
-    let presentMatches = [];
-
-    for (let index = 0; index < schedule.length; index++) {
-      const element = schedule[index];
-      let formattedDate = new Date().toISOString().split("T")[0];
-      if (element.MatchStatus === "UpComing" && element.MatchDate === formattedDate) {
-        presentMatches.push(element);
-      }
+      setMatches(pred);
     }
-    setPresentMatches(presentMatches);
+  }, [schedule]);
+
+  useEffect(() => {
+    if (schedule) {
+      let presentMatches = [];
+      // console.log(matches, "Matches");
+      for (let index = 0; index < schedule.length; index++) {
+        const element = schedule[index];
+        // console.log(element, "Element");
+        let formattedDate = new Date().toISOString().split("T")[0];
+        // console.log(formattedDate, "Formatted Date");
+        const parsedDate = parse(element.date + " 2025", "EEE, MMM dd yyyy", new Date());
+        const formattedDate1 = format(parsedDate, "yyyy-MM-dd");
+        element["matchName"] = element.team1 + " vs " + element.team2;
+        // console.log(formattedDate1, "Element Date");
+        if (formattedDate1 === formattedDate) {
+          presentMatches.push(element);
+        }
       }
-}, [schedule]);
+      setPresentMatches(presentMatches);
+    }
+  }, [schedule]);
 
   return (
     <div className="App">
@@ -110,7 +118,7 @@ useEffect(() => {
       {/* Conditional Rendering based on selected tab */}
       <main className="content">
         {selectedTab === "schedule" && schedule && <IplSchedule schedule={schedule} />}
-        {selectedTab === "points" && pointsTable && <IplPointsTable points = {pointsTable}/>}
+        {selectedTab === "points" && pointsTable && <IplPointsTable points={pointsTable} />}
         {selectedTab === "prediction" && matches && <IPLPrediction matches={matches} />}
         {selectedTab === "betting" && presentMatches && <IplBetting matches={presentMatches} />}
       </main>
