@@ -81,6 +81,7 @@ export default function IPLPrediction({ matches }) {
                 <table className="prediction-table">
                     <thead>
                         <tr>
+                            <th>SNO</th>
                             <th>Match</th>
                             <th>Venue</th>
                             <th>Predicted Winner</th>
@@ -91,6 +92,7 @@ export default function IPLPrediction({ matches }) {
                     <tbody>
                         {predictions.length > 0 && predictions.map((pred, index) => (
                             <tr key={index}>
+                                <td>{index + 1}</td>
                                 <td>{pred.team1} vs {pred.team2}</td>
                                 <td>{pred.Venue}</td>
                                 <td>{pred.winner}</td>
