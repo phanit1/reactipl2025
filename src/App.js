@@ -110,7 +110,7 @@ useEffect(() => {
       {/* Conditional Rendering based on selected tab */}
       <main className="content">
         {selectedTab === "schedule" && schedule && <IplSchedule schedule={schedule} />}
-        {selectedTab === "points" && <IplPointsTable points = {pointsTable}/>}
+        {selectedTab === "points" && pointsTable && <IplPointsTable points = {pointsTable}/>}
         {selectedTab === "prediction" && matches && <IPLPrediction matches={matches} />}
         {selectedTab === "betting" && presentMatches && <IplBetting matches={presentMatches} />}
       </main>
