@@ -10,23 +10,7 @@ function App() {
   const [schedule, setSchedule] = useState(null);
   const [pointsTable, setPointsTable] = useState(null);
   const [matches, setMatches] = useState([]);
-  const [presentMatches, setPresentMatches] = useState([]);
-
-//   // Fetch match schedule
-//   useEffect(() => {
-//     (async () => {
-//       try {
-//         const response = await fetch("https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/203-matchschedule.js?MatchSchedule=_jqjsp&_1742886894491");
-//         const result = await response.text();
-//         const jsonString = result.replace(/^MatchSchedule\(/, "").replace(/\);$/, "");
-//         const jsonData = JSON.parse(jsonString);
-//         setSchedule(jsonData.Matchsummary || []);
-//       } catch (error) {
-//         console.log('error', error);
-//       }
-//     })();
-//   }, []);
-  
+  const [presentMatches, setPresentMatches] = useState([]);  
 
   useEffect(() => {
     async function fetchIPL2025Matches() {
@@ -37,83 +21,8 @@ function App() {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const html = await response.text();
-
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-
-        const matchElements = doc.querySelectorAll('.cb-series-matches');
-        const scheduleData = [];
-
-        matchElements.forEach((matchElement) => {
-          console.log('matchElement', matchElement);
-          const dateElement = matchElement.querySelector('[ng-bind*="date:"]');
-          const dateTimestamp = dateElement
-            ? dateElement.getAttribute('ng-bind').match(/\d+/)[0]
-            : null;
-
-          const timeElement = matchElement.querySelector('[timestamp]');
-          const timeTimestamp = timeElement ? timeElement.getAttribute('timestamp') : null;
-
-          if (!dateTimestamp || !timeTimestamp) {
-            return null;
-          }
-
-          const date = new Date(parseInt(dateTimestamp));
-          const time = new Date(parseInt(timeTimestamp));
-
-          const options = {
-            month: 'short',
-            day: 'numeric',
-            weekday: 'short',
-          };
-          const formattedDate = date.toLocaleDateString('en-US', options);
-          console.log('formattedDate', formattedDate);
-          const timeOptions = {
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true,
-          };
-          const formattedTime = time.toLocaleTimeString('en-US', timeOptions);
-          console.log('formattedTime', formattedTime);
-
-          const matchDetailsElement = matchElement.querySelector('.cb-srs-mtchs-tm a span');
-          const matchDetails = matchDetailsElement ? matchDetailsElement.textContent.trim() : null;
-
-          const venueElement = matchElement.querySelector('.cb-srs-mtchs-tm .text-gray');
-          const venue = venueElement ? venueElement.textContent.trim() : null;
-
-          const resultElement = matchElement.querySelector('.cb-text-complete');
-          const result = resultElement ? resultElement.textContent.trim() : null;
-
-          if (matchDetails) {
-            scheduleData.push({
-              date: formattedDate,
-              matchDetails,
-              venue,
-              result,
-              time: formattedTime,
-            });
-          }
-        });
-
-        const ipl2025Matches = scheduleData.map((match) => {
-          const teams = match.matchDetails.split(' vs ');
-          const matchNumber = teams[1].split(",")[1].trim();
-          return {
-            date: match.date,
-            team1: teams[0],
-            team2: teams[1].split(",")[0].trim(),
-            matchNumber: matchNumber,
-            venue: match.venue,
-            time: match.time,
-            status: match.result || 'Upcoming',
-          };
-        }
-        );
-        // console.log('ipl2025Matches', ipl2025Matches);
-        setSchedule(ipl2025Matches);
-        // setLoading(false);
+        const data = await response.json();
+        setSchedule(data.matches);
       } catch (err) {
         // setError(err);
         // setLoading(false);
@@ -121,6 +30,25 @@ function App() {
     }
 
     fetchIPL2025Matches();
+  }, []);
+
+  useEffect(() => {
+    async function fetchPointsTable() { 
+      try {
+        const response = await fetch(
+          'https://reactipl2025backend.vercel.app/api/iplpointstable'  
+        );
+        if (!response.ok) {   
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setPointsTable(data.pointsTable);
+      } catch (err) {
+        // setError(err);
+        // setLoading(false);
+      }
+    }
+    fetchPointsTable();
   }, []);
 
   useEffect(() => {
@@ -139,7 +67,6 @@ useEffect(() => {
 
     for (let index = 0; index < schedule.length; index++) {
       const element = schedule[index];
-      // console.log("element", element);
       let formattedDate = new Date().toISOString().split("T")[0];
       if (element.MatchStatus === "UpComing" && element.MatchDate === formattedDate) {
         presentMatches.push(element);
@@ -183,7 +110,7 @@ useEffect(() => {
       {/* Conditional Rendering based on selected tab */}
       <main className="content">
         {selectedTab === "schedule" && schedule && <IplSchedule schedule={schedule} />}
-        {selectedTab === "points" && <IplPointsTable />}
+        {selectedTab === "points" && <IplPointsTable points = {pointsTable}/>}
         {selectedTab === "prediction" && matches && <IPLPrediction matches={matches} />}
         {selectedTab === "betting" && presentMatches && <IplBetting matches={presentMatches} />}
       </main>
