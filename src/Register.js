@@ -14,7 +14,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/api/register", {
+      const res = await fetch("https://reactipl2025backend.vercel.app/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -24,7 +24,7 @@ function Register() {
 
       if (res.ok) {
         alert("Registration successful! Please login.");
-        navigate("/login");
+        navigate("/");
       } else {
         alert(data.message || "Registration failed.");
       }
@@ -45,6 +45,9 @@ function Register() {
           <option value="admin">Admin</option>
         </select>
         <button type="submit">Register</button>
+        <p>
+          Already have an account? <a href="/">Login</a>
+        </p>
       </form>
     </div>
   );
