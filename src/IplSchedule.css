@@ -21,24 +21,34 @@
     text-transform: uppercase;
   }
   
-  /* Filters */
   .filters {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
   }
   
-  .filters input,
-  .filters select {
-    padding: 10px;
-    border-radius: 8px;
+  .filters select,
+  .filters input {
+    padding: 8px 12px;
     border: 1px solid #ccc;
-    font-size: 1rem;
-    min-width: 180px;
-    flex: 0 0 auto;
+    border-radius: 6px;
+    font-size: 14px;
+    min-width: 150px;
+    flex: 1;
+  }
+  
+  @media (max-width: 768px) {
+    .filters {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .filters select,
+    .filters input {
+      width: 100%;
+    }
   }
   
   /* Cards Container */
