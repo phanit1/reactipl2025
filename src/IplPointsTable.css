@@ -1,59 +1,67 @@
-/* App.css */
+.container {
+  width: 100%;
+  overflow-x: auto; /* Enables horizontal scrolling on smaller screens */
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1); /* Light transparent background */
+  border-radius: 10px;
+  margin: -30px auto;
+}
 
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    /* background-color: #f4f4f4; */
-  }
-  
-  .app {
-    padding: 20px;
-  }
-  
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-    /* background-color: #fff; */
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  
-  .heading {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .points-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
+.points-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.points-table thead {
+  background: #003366; /* Dark blue IPL theme */
+  color: white;
+}
+
+.points-table th,
+.points-table td {
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.points-table tbody tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.points-table tbody tr:hover {
+  background: rgba(0, 51, 102, 0.2);
+  cursor: pointer;
+}
+
+.team-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: bold;
+}
+
+.team-logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
   .points-table th,
   .points-table td {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: center;
+      padding: 8px;
+      font-size: 14px;
   }
-  
-  .points-table thead {
-    /* background-color: #e0e0e0; */
-  }
-  
-  .team-cell {
-    display: flex;
-    /* align-items: center;
-    justify-content: center; */
-  }
-  
+
   .team-logo {
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
+      width: 20px;
+      height: 20px;
   }
-  
-  .points {
-    font-weight: bold;
-  }
-  
+}

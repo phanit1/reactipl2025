@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./IPLPrediction.css";
-// import dotenv from "dotenv";
-// dotenv.config();
 import API_KEY from "./config";
 
 export default function IPLPrediction({ matches }) {
     const [predictions, setPredictions] = useState([]);
     const [loading, setLoading] = useState(false);
-    // console.log(matches,"Matches")
     const APIKey = API_KEY.API_KEY; // Replace with your actual API key
     const BASE_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent";
 
@@ -37,25 +34,19 @@ export default function IPLPrediction({ matches }) {
                 );
 
                 const rawOutput = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
-                // console.log(rawOutput,"Raw Output")
                 const result = JSON.parse(JSON.stringify(rawOutput)); // Convert to JSON
                 const res = result.split("```json")[1].split("```")[0];
-                // const res1 = res.map((r) => JSON.parse(r));
                 let res1 = JSON.parse(res);
                 res1.map((r, index) => {
                     if (r.team1 + " vs " + r.team2 === matches[index]) {
-                        // console.log(matchesResult[index], "Matches Result")
-                        if(matchesResult) {
+                        if (matchesResult) {
                             if (matchesResult[index].includes(" won")) {
                                 r.Result = matchesResult[index].split(" won")[0];
-                            }
-                            else {
+                            } else {
                                 r.Result = "Upcoming";
                             }
                             r.Venue = matchesVenue[index];
-                            // r.Result = matchesResult[index].split(" won")[0];
                         }
-                        
                     }
                 });
                 setPredictions(res1);
@@ -90,7 +81,7 @@ export default function IPLPrediction({ matches }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {predictions.length > 0 && predictions.map((pred, index) => (
+                        {predictions.map((pred, index) => (
                             <tr key={index}>
                                 <td>{index + 1}</td>
                                 <td>{pred.team1} vs {pred.team2}</td>

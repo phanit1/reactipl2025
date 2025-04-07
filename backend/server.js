@@ -41,7 +41,7 @@ app.get("/api/iplmatches", async (req, res) => {
                 weekday: "short",
             });
 
-            const formattedTime = time.toLocaleTimeString("en-US", {
+            const formattedTime = new Date(time.getTime() + 5.5 * 60 * 60 * 1000).toLocaleTimeString("en-US", {
                 hour: "numeric",
                 minute: "numeric",
                 hour12: true,

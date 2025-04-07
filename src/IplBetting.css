@@ -1,108 +1,121 @@
-/* General Styling */
-body {
-    font-family: "Poppins", sans-serif;
-    background: linear-gradient(to right, #141e30, #243b55);
-    /* color: white; */
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-  
-/* Betting Container */
 .betting-container {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 25px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
-    text-align: center;
-}
-  
-/* Headings */
-h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #f8d90f;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-  
-/* Labels */
-label {
-    font-size: 16px;
-    font-weight: bold;
-    display: block;
-    margin: 10px 0 5px;
-    text-align: left;
-    color: #ddd;
-}
-  
-/* Select Dropdown */
-select {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    font-size: 16px;
-    outline: none;
-    appearance: none;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 30px 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-select option {
-    background: #141e30;
-    color: white;
+.betting-container h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    color: #1976d2;
+    margin-bottom: 25px;
 }
-  
-/* Input Fields */
-input {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    font-size: 16px;
+
+.betting-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.betting-form div {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    flex: 1 1 220px;
+}
+
+@media (max-width: 480px) {
+    .betting-form div {
+        display: flex;
+        flex-direction: column;
+        min-width: 200px;
+    }
+}
+
+.betting-form label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.betting-form select,
+.betting-form input[type="number"] {
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.betting-form select:focus,
+.betting-form input:focus {
     outline: none;
+    border-color: #1976d2;
 }
-  
-/* Buttons */
-button {
-    width: 100px;
-    padding: 10px;
-    margin: 10px 5px;
+
+.betting-form button {
+    background-color: #1976d2;
+    color: white;
     border: none;
-    border-radius: 5px;
-    font-size: 16px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
     cursor: pointer;
-    transition: 0.3s ease-in-out;
-    background: #f8d90f;
-    color: black;
-    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
-  
-button:hover {
-    background: #ffcc00;
-    transform: scale(1.05);
+
+.betting-form button:hover {
+    background-color: #0d47a1;
 }
-  
-/* Toss Buttons */
-.selected {
-    background-color: #f8d90f !important;
-    color: #141e30 !important;
-    font-weight: bold;
-    border: 2px solid #141e30;
+
+/* Responsive for tablets and smaller */
+@media (max-width: 768px) {
+    .betting-form {
+        flex-direction: column;
+        align-items: stretch;
+        /* gap: 1rem; */
+    }
+
+    .betting-form div {
+        width: 100%;
+    }
+
+    .betting-form button {
+        width: 100%;
+        font-size: 1.1rem;
+    }
+
+    .betting-container h2 {
+        font-size: 1.8rem;
+    }
 }
-  
-/* Responsive */
-@media (max-width: 500px) {
+
+/* Extra responsive for smaller mobile devices */
+@media (max-width: 480px) {
     .betting-container {
-        width: 90%;
-        padding: 20px;
+        padding: 20px 15px;
+    }
+
+    .betting-form input,
+    .betting-form select {
+        font-size: 0.95rem;
+    }
+
+    .betting-form button {
+        font-size: 1rem;
+    }
+
+    .betting-form div {
+        display: flex;
+        flex-direction: column;
+        min-width: 200px;
+        flex: 1 1 100%;
     }
 }
