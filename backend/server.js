@@ -2,9 +2,26 @@ const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const cors = require("cors");
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const User = mongoose.model("User", userSchema);
+
+// Hash password before saving
+userSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) return next();
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+});
+
+// Compare password
+userSchema.methods.matchPassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+};
+
 
 app.use(cors());
 app.use(express.json());
@@ -142,6 +159,53 @@ app.get("/api/iplpointstable", async (req, res) => {
     }
 });
 
+// Register Route
+app.post("/api/register", async (req, res) => {
+    const { username, password, role } = req.body;
+
+    try {
+        const userExists = await User.findOne({ username });
+        if (userExists) {
+            return res.status(400).json({ success: false, message: "User already exists" });
+        }
+
+        const user = await User.create({ username, password, role });
+        res.status(201).json({ success: true, message: "User registered successfully", userId: user._id });
+    } catch (error) {
+        console.error("Error registering user:", error.message);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Login Route
+app.post("/api/login", async (req, res) => {
+    const { username, password, login } = req.body;
+
+    try {
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(400).json({ success: false, message: "Invalid username or password" });
+        }
+
+        const isMatch = await user.matchPassword(password);
+        if (!isMatch) {
+            return res.status(400).json({ success: false, message: "Invalid username or password" });
+        }
+
+        res.json({ success: true, message: "Login successful", userData: { username: user.username, role: user.role } });
+    } catch (error) {
+        console.error("Error logging in user:", error.message);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+const url = "mongodb+srv://ppaproject:Teamwork12@sample-sxout.mongodb.net/IPLUsersDB?retryWrites=true&w=majority"; // setting mongodb database url
+
+// Connect to MongoDB (replace with your MongoDB URI)
+mongoose.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 
 // Start Server
 app.listen(PORT, () => {
