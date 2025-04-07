@@ -1,6 +1,6 @@
 // // src/components/AdminPanel.js
 // import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import "./AdminDashboard.css";
 import { users } from "./data";
 
@@ -58,7 +58,7 @@ import { users } from "./data";
 
 // export default AdminDashboard;
 // src/pages/AdminDashboard.jsx
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 const AdminDashboard = () => {
 //   const [data, setData] = useState(users);
