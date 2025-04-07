@@ -7,10 +7,18 @@ const bcrypt = require("bcryptjs");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const User = mongoose.model("User", userSchema);
+
+const UserSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  role: { type: String, enum: ["user", "admin"], default: "user" },
+});
+
+// module.exports = mongoose.model("User", UserSchema);
+const User = mongoose.model("User", UserSchema);
 
 // Hash password before saving
-userSchema.pre("save", async function (next) {
+UserSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
@@ -18,7 +26,7 @@ userSchema.pre("save", async function (next) {
 });
 
 // Compare password
-userSchema.methods.matchPassword = async function (enteredPassword) {
+UserSchema.methods.matchPassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
