@@ -169,15 +169,15 @@ app.get("/api/iplpointstable", async (req, res) => {
 
 // Register Route
 app.post("/api/register", async (req, res) => {
-    const { username, password, role } = req.body;
+    const { email, password, role } = req.body;
 
     try {
-        const userExists = await User.findOne({ username });
+        const userExists = await User.findOne({ email });
         if (userExists) {
             return res.status(400).json({ success: false, message: "User already exists" });
         }
 
-        const user = await User.create({ username, password, role });
+        const user = await User.create({ email, password, role });
         res.status(201).json({ success: true, message: "User registered successfully", userId: user._id });
     } catch (error) {
         console.error("Error registering user:", error.message);
@@ -187,20 +187,20 @@ app.post("/api/register", async (req, res) => {
 
 // Login Route
 app.post("/api/login", async (req, res) => {
-    const { username, password, role } = req.body;
+    const { email, password, role } = req.body;
 
     try {
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ success: false, message: "Invalid username or password" });
+            return res.status(400).json({ success: false, message: "Invalid email or password" });
         }
 
         const isMatch = await user.matchPassword(password);
         if (!isMatch) {
-            return res.status(400).json({ success: false, message: "Invalid username or password" });
+            return res.status(400).json({ success: false, message: "Invalid email or password" });
         }
 
-        res.json({ success: true, message: "Login successful", userData: { username: user.username, role: user.role } });
+        res.json({ success: true, message: "Login successful", userData: { email: user.email, role: user.role } });
     } catch (error) {
         console.error("Error logging in user:", error.message);
         res.status(500).json({ success: false, error: error.message });
