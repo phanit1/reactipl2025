@@ -7,6 +7,7 @@ import { format, parse } from 'date-fns';
 import IplPointsTable from './IPLPointsTable';
 import IplBetting from './IplBetting';
 import IPLPrediction from './IPLPrediction';
+import IplHomePage from './IplHomePage';
 
 function App() {
     const [content, setContent] = useState(''); // Default to IPL 2025 images
@@ -85,7 +86,7 @@ function App() {
     const renderContent = () => {
         switch (content) {
             case 'home':
-                return <div><h2>IPL 2025</h2></div>;
+                return <IplHomePage />;
             case 'schedule':
                 return <IplSchedule schedule={schedule} />;
             case 'points':
@@ -97,7 +98,7 @@ function App() {
             case 'livescore':
                 return <div><h2>Live Score</h2></div>;
             default:
-                return <div><h2>IPL 2025</h2></div>;
+                return <IplHomePage />;
         }
     };
 
