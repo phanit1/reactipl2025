@@ -25,10 +25,10 @@ UserSchema.pre("save", async function (next) {
     next();
 });
 
-// Compare password
-UserSchema.methods.matchPassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
-};
+// // Compare password
+// const matchPassword = async function (enteredPassword) {
+//     return await bcrypt.compare(enteredPassword, this.password);
+// };
 
 
 app.use(cors());
@@ -195,7 +195,7 @@ app.post("/api/login", async (req, res) => {
             return res.status(400).json({ success: false, message: "Invalid email or password" });
         }
 
-        const isMatch = await user.matchPassword(password);
+        const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ success: false, message: "Invalid email or password" });
         }
