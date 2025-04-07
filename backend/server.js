@@ -179,7 +179,7 @@ app.post("/api/register", async (req, res) => {
 
 // Login Route
 app.post("/api/login", async (req, res) => {
-    const { username, password, login } = req.body;
+    const { username, password, role } = req.body;
 
     try {
         const user = await User.findOne({ username });
