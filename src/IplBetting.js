@@ -20,6 +20,15 @@ const IplBetting = ({ presentMatches }) => {
 • Bet Amount: ₹${betAmount}`);
   };
 
+  const handleBetAmountChange = (e) => {
+    let value = e.replace(/[^0-9]/g, ""); // Allow only numbers
+    if (parseInt(value, 10) > 1000) {
+      alert("Bet amount cannot exceed ₹1000. We care about our customers' safety and money.");
+      value = "1000";
+    }
+    setBetAmount(value);
+  };
+
   const currentTeams = selectedMatch
     ? selectedMatch.split(" vs ")
     : presentMatches[0]?.matchName.split(" vs ");
@@ -79,7 +88,7 @@ const IplBetting = ({ presentMatches }) => {
             type="number"
             placeholder="Enter amount"
             value={betAmount}
-            onChange={(e) => setBetAmount(e.target.value)}
+            onChange={(e) => handleBetAmountChange(e.target.value)}
           />
         </div>
 
