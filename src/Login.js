@@ -73,8 +73,7 @@ function Login() {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("role", data.userData.role);
                 localStorage.setItem("email", data.userData.email);
-
-                if (data.role === "admin") {
+                if (data.userData.role === "admin") {
                     navigate("/admin");
                 } else {
                     navigate("/user");
