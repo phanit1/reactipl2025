@@ -9,10 +9,13 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const UserSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ["user", "admin"], default: "user" },
+    email: { type: String, required: true },
+    password: { type: String, required: true },
+    role: { type: String, enum: ["user", "admin"], default: "user" },
 });
+
+// Create a compound index to enforce uniqueness on email and role
+UserSchema.index({ email: 1, role: 1 }, { unique: true });
 
 // module.exports = mongoose.model("User", UserSchema);
 const User = mongoose.model("User", UserSchema);
@@ -172,9 +175,9 @@ app.post("/api/register", async (req, res) => {
     const { email, password, role } = req.body;
 
     try {
-        const userExists = await User.findOne({ email });
+        const userExists = await User.findOne({ email, role });
         if (userExists) {
-            return res.status(400).json({ success: false, message: "User already exists" });
+            return res.status(400).json({ success: false, message: "User with this email and role already exists" });
         }
 
         const user = await User.create({ email, password, role });
