@@ -7,18 +7,23 @@ const MatchInfo = () => {
     const [matchInfo, setMatchInfo] = useState(null);
 
     useEffect(() => {
-        async function fetchMatchData() {
-            try {
-                const response = await fetch(`https://reactipl2025backend.vercel.app/api/iplscore/${matchId}`);
-                const data = await response.json();
-                setMatchInfo(data);
-            } catch (err) {
-                console.error("Error fetching match data:", err);
+        const intervalId = setInterval(() => {
+            async function fetchMatchData() {
+                try {
+                    const response = await fetch(`https://reactipl2025backend.vercel.app/api/iplscore/${matchId}`);
+                    const data = await response.json();
+                    setMatchInfo(data);
+                } catch (err) {
+                    console.error("Error fetching match data:", err);
+                }
             }
-        }
-
-        fetchMatchData();
+    
+            fetchMatchData();
+        }, 5);
+    
+        return () => clearInterval(intervalId);
     }, [matchId]);
+    
 
     const innings =
         selectedInnings === 'Innings1'
