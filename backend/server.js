@@ -13,11 +13,8 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true },
     role: { type: String, enum: ["user", "admin"], default: "user" },
 });
-
-// module.exports = mongoose.model("User", UserSchema);
 const User = mongoose.model("User", UserSchema);
 
-// Hash password before saving
 UserSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
     const salt = await bcrypt.genSalt(10);
@@ -25,233 +22,73 @@ UserSchema.pre("save", async function (next) {
     next();
 });
 
-// // Compare password
-// const matchPassword = async function (enteredPassword) {
-//     return await bcrypt.compare(enteredPassword, this.password);
-// };
-
-
 app.use(cors());
 app.use(express.json());
 
-// Cricbuzz URL for IPL 2025 Schedule (Update if needed)
 const CRICBUZZ_URL = "https://www.cricbuzz.com/cricket-series/9237/indian-premier-league-2025/matches";
 const IPL_INFO_URL = "https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/203-matchschedule.js";
 const IPL_POINTS_TABLE_URL = "https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/stats/203-groupstandings.js";
 let matchSummary = [];
-// API Route to Scrape IPL 2025 Schedule
-// app.get("/api/iplmatches", async (req, res) => {
-//     try {
-//         // Fetch Cricbuzz page content
-//         const response = await axios.get(CRICBUZZ_URL);
-//         const $ = cheerio.load(response.data);
-//         // console.log("Page Title:", $("title").text());
-//         let scheduleData = [];
-
-//         // Cricbuzz match elements
-//         $(".cb-series-matches").each((index, element) => {
-//             const dateElement = $(element).find("[ng-bind*='date:']");
-//             const dateTimestamp = dateElement.length ? dateElement.attr("ng-bind").match(/\d+/)[0] : null;
-
-//             const timeElement = $(element).find("[timestamp]");
-//             const timeTimestamp = timeElement.length ? timeElement.attr("timestamp") : null;
-
-//             if (!dateTimestamp || !timeTimestamp) return;
-
-//             const date = new Date(parseInt(dateTimestamp));
-//             const time = new Date(parseInt(timeTimestamp));
-
-//             // Format Date & Time
-//             const formattedDate = date.toLocaleDateString("en-US", {
-//                 month: "short",
-//                 day: "numeric",
-//                 weekday: "short",
-//             });
-
-//             const formattedTime = new Date(time.getTime() + 5.5 * 60 * 60 * 1000).toLocaleTimeString("en-US", {
-//                 hour: "numeric",
-//                 minute: "numeric",
-//                 hour12: true,
-//             });
-
-//             // Extract Match Details
-//             const matchDetailsElement = $(element).find(".cb-srs-mtchs-tm a span");
-//             const matchDetails = matchDetailsElement.length ? matchDetailsElement.text().trim() : null;
-
-//             const venueElement = $(element).find(".cb-srs-mtchs-tm .text-gray");
-//             const venue = venueElement.length ? venueElement.text().split("0")[0].split("1")[0].trim() : null;
-
-//             const resultElement = $(element).find(".cb-text-complete");
-//             const result = resultElement.length ? resultElement.text().trim() : "Upcoming";
-
-//             if (matchDetails) {
-//                 scheduleData.push({
-//                     date: formattedDate,
-//                     matchDetails,
-//                     venue,
-//                     result,
-//                     time: formattedTime,
-//                 });
-//             }
-//         });
-
-//         // Process Matches into a Clean JSON Structure
-//         const ipl2025Matches = scheduleData.map((match) => {
-//             const teams = match.matchDetails.split(" vs ");
-//             const matchNumber = teams[1].split(",")[1]?.trim() || "TBD";
-
-//             return {
-//                 date: match.date,
-//                 team1: teams[0],
-//                 team2: teams[1].split(",")[0].trim(),
-//                 matchNumber: matchNumber,
-//                 venue: match.venue,
-//                 time: match.time,
-//                 status: match.result || "Upcoming",
-//             };
-//         });
-
-//         res.json({ success: true, matches: ipl2025Matches });
-//     } catch (error) {
-//         console.error("Error fetching IPL matches:", error.message);
-//         res.status(500).json({ success: false, error: error.message });
-//     }
-// });
-
-// API Route to Scrape IPL 2025 Points Table (if needed)
-// API Route to Scrape IPL 2025 Points Table
-// app.get("/api/iplpointstable", async (req, res) => {
-//     try {
-//         // Fetch Cricbuzz page content
-//         const POINTS_TABLE_URL = "https://www.cricbuzz.com/cricket-series/9237/indian-premier-league-2025/points-table";
-//         const response = await axios.get(POINTS_TABLE_URL);
-//         // console.log("Response:", response.data);
-//         const $ = cheerio.load(response.data);
-//         // console.log($,"Response data")
-//         let pointsTableData = [];
-
-//         // Cricbuzz points table elements
-//         $("table.cb-srs-pnts tbody tr").each((index, element) => {
-//             const columns = $(element).find("td, th");
-
-//             // Extract the text content
-//             const teamName = $(columns[0]).text().trim();
-//             const matchesPlayed = $(columns[1]).text().trim();
-//             const matchesWon = $(columns[2]).text().trim();
-//             const matchesLost = $(columns[3]).text().trim();
-//             const matchesTied = $(columns[4]).text().trim();
-//             const matchesNR = $(columns[5]).text().trim();
-//             const points = $(columns[6]).text().trim();
-//             const netRunRate = $(columns[7]).text().trim();
-
-//             if (teamName) {
-//                 pointsTableData.push({
-//                     team: teamName,
-//                     matchesPlayed,
-//                     matchesWon,
-//                     matchesLost,
-//                     matchesTied,
-//                     matchesNR,
-//                     points,
-//                     netRunRate,
-//                 });
-//             }
-//         });
-
-//         console.log(pointsTableData); // Output the extracted
-//         // Filter out duplicate rows if necessary
-//         pointsTableData = pointsTableData.filter((item, index) => item.points.length == 1 || item.points.length == 2);
-
-//         res.json({ success: true, pointsTable: pointsTableData });
-//     } catch (error) {
-//         console.error("Error fetching IPL points table:", error.message);
-//         res.status(500).json({ success: false, error: error.message });
-//     }
-// });
 
 app.get("/api/iplpointstable", async (req, res) => {
     try {
         const iplinforesponse = await axios.get(IPL_POINTS_TABLE_URL);
         const jsonString = iplinforesponse.data.match(/ongroupstandings\((.*)\)/)[1];
-        console.log("IPL Points Table JSON String:", jsonString);
         const parsed = JSON.parse(jsonString);
         const pointsTableData = parsed.points;
-        console.log("Points Table Data:", pointsTableData);
         res.json({ success: true, pointsTable: pointsTableData });
     } catch (error) {
-        console.error("Error fetching IPL Points Table:", error.message);
         res.status(500).json({ success: false, error: error.message });
     }
 });
 
-// API Route to Scrape IPL 2025 Matches (if needed)
 app.get("/api/iplscore/:matchId", async (req, res) => {
     const matchId = req.params.matchId;
-    // console.log("Match ID:", matchId);
-    // console.log("Match Summary:", matchSummary);
     const match = matchSummary.find((m) => m.MatchID == matchId);
-    // console.log("Match Details:", match);
-    // if (!match) {
-    //     return res.status(404).json({ success: false, message: "Match not found" });
-    // }
-    // console.log(match.MatchStatus,"MatchStatus")
-    const INN1_URL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/${matchId}-Innings1.js`
+    const INN1_URL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/${matchId}-Innings1.js`;
     const INN2_URL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/${matchId}-Innings2.js`;
+
     try {
         if (match.MatchStatus == 'Live') {
-            // console.log("Fetching Live Match Data...");
             try {
                 const inn1response = await axios.get(INN1_URL);
-                console.log("IPL Inn1 Response:", inn1response.data);
                 const inn1String = inn1response.data.match(/onScoring\((.*)\)/)[1];
                 const inn1Parsed = JSON.parse(inn1String);
 
                 try {
                     const inn2response = await axios.get(INN2_URL);
-                    console.log("IPL Inn2 Response:", inn2response.data);
                     const inn2String = inn2response.data.match(/onScoring\((.*)\)/)[1];
                     const inn2Parsed = JSON.parse(inn2String);
 
                     res.json({ success: true, scores1: inn1Parsed, scores2: inn2Parsed });
-                } catch (error) {
-                    console.error("Error fetching Innings 2 data:", error.message);
+                } catch {
                     res.json({ success: true, scores1: inn1Parsed, scores2: null });
                 }
-            } catch (error) {
-                console.error("Error fetching Innings 1 data:", error.message);
+            } catch {
                 try {
                     const inn2response = await axios.get(INN2_URL);
-                    console.log("IPL Inn2 Response:", inn2response.data);
                     const inn2String = inn2response.data.match(/onScoring\((.*)\)/)[1];
                     const inn2Parsed = JSON.parse(inn2String);
 
                     res.json({ success: true, scores1: null, scores2: inn2Parsed });
-                } catch (error) {
-                    console.error("Error fetching Innings 2 data:", error.message);
+                } catch {
                     res.json({ success: true, scores1: null, scores2: null });
                 }
             }
-        }
-        else if (match.MatchStatus == 'Post') {
+        } else if (match.MatchStatus == 'Post') {
             const inn1response = await axios.get(INN1_URL);
-            console.log("IPL Inn1 Response:", inn1response.data);
             const inn2response = await axios.get(INN2_URL);
-            console.log("IPL Inn2 Response:", inn2response.data);
             const inn1String = inn1response.data.match(/onScoring\((.*)\)/)[1];
             const inn2String = inn2response.data.match(/onScoring\((.*)\)/)[1];
             const inn1Parsed = JSON.parse(inn1String);
             const inn2Parsed = JSON.parse(inn2String);
             res.json({ success: true, scores1: inn1Parsed, scores2: inn2Parsed });
-        }
-        else {
+        } else {
             res.status(200).json({ success: true, message: "Match Innings not Started" });
         }
-
     } catch (error) {
-        console.error("Error fetching IPL scores:", error.message);
         res.status(500).json({ success: false, error: error.message });
     }
-
 });
 
 app.get("/api/iplmatches", async (req, res) => {
@@ -262,58 +99,46 @@ app.get("/api/iplmatches", async (req, res) => {
         matchSummary = parsed.Matchsummary.sort((a, b) => new Date(a.MatchDateNew) - new Date(b.MatchDateNew));
         res.json({ success: true, matches: matchSummary });
     } catch (error) {
-        console.error("Error fetching IPL Info:", error.message);
-        res.status(500).json({ success: false, error: error.message });
-    }
-}
-);
-
-
-// Register Route
-app.post("/api/register", async (req, res) => {
-    const { email, password, role } = req.body;
-
-    try {
-        const userExists = await User.findOne({ email, role });
-        if (userExists) {
-            return res.status(400).json({ success: false, message: "User with this email and role already exists" });
-        }
-
-        const user = await User.create({ email, password, role });
-        res.status(201).json({ success: true, message: "User registered successfully", userId: user._id });
-    } catch (error) {
-        console.error("Error registering user:", error.message);
         res.status(500).json({ success: false, error: error.message });
     }
 });
 
-// Login Route
+app.post("/api/register", async (req, res) => {
+    const { email, password, role } = req.body;
+    try {
+        const userExists = await User.find({ email:email, role:role });
+        if (userExists.length > 0) {
+            return res.status(409).json({ success: false, message: "User with this email and role already exists" });
+        }
+        else {
+            const user = await User.create({ email, password, role });
+            res.status(201).json({ success: true, message: "User registered successfully"});    
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 app.post("/api/login", async (req, res) => {
     const { email, password, role } = req.body;
 
     try {
         const user = await User.findOne({ email });
         const isMatch = password === user.password;
-        if (!user) {
-            return res.status(400).json({ success: false, message: "Invalid email or password" });
-        }
-        if (!isMatch) {
+        if (!user || !isMatch) {
             return res.status(400).json({ success: false, message: "Invalid email or password" });
         }
 
         res.json({ success: true, message: "Login successful", userData: { email: user.email, role: user.role } });
     } catch (error) {
-        console.error("Error logging in user:", error.message);
         res.status(500).json({ success: false, error: error.message });
     }
 });
 
-const url = "mongodb+srv://ppaproject:Teamwork12@sample-sxout.mongodb.net/IPLUsersDB?retryWrites=true&w=majority"; // setting mongodb database url
+const url = "mongodb+srv://ppaproject:Teamwork12@sample-sxout.mongodb.net/IPLUsersDB?retryWrites=true&w=majority";
 
-// Connect to MongoDB (replace with your MongoDB URI)
 mongoose.connect(url);
 
-// Start Server
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

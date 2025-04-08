@@ -19,7 +19,8 @@ const MatchInfo = () => {
             }
     
             fetchMatchData();
-        }, 5);
+            console.log("Fetching match data...");
+        }, 1000);
     
         return () => clearInterval(intervalId);
     }, [matchId]);
