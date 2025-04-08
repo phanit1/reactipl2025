@@ -45,6 +45,7 @@ app.get("/api/iplpointstable", async (req, res) => {
 app.get("/api/iplscore/:matchId", async (req, res) => {
     const matchId = req.params.matchId;
     const match = matchSummary.find((m) => m.MatchID == matchId);
+    console.log(match, "Match");
     const INN1_URL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/${matchId}-Innings1.js`;
     const INN2_URL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/${matchId}-Innings2.js`;
 
@@ -60,9 +61,9 @@ app.get("/api/iplscore/:matchId", async (req, res) => {
                     const inn2String = inn2response.data.match(/onScoring\((.*)\)/)[1];
                     const inn2Parsed = JSON.parse(inn2String);
 
-                    res.json({ success: true, scores1: inn1Parsed, scores2: inn2Parsed });
+                    res.json({ success: true, matchDetails: match, scores1: inn1Parsed, scores2: inn2Parsed });
                 } catch {
-                    res.json({ success: true, scores1: inn1Parsed, scores2: null });
+                    res.json({ success: true, matchDetails: match, scores1: inn1Parsed, scores2: null });
                 }
             } catch {
                 try {
@@ -70,7 +71,7 @@ app.get("/api/iplscore/:matchId", async (req, res) => {
                     const inn2String = inn2response.data.match(/onScoring\((.*)\)/)[1];
                     const inn2Parsed = JSON.parse(inn2String);
 
-                    res.json({ success: true, scores1: null, scores2: inn2Parsed });
+                    res.json({ success: true, matchDetails: match, scores1: null, scores2: inn2Parsed });
                 } catch {
                     res.json({ success: true, scores1: null, scores2: null });
                 }
@@ -82,7 +83,7 @@ app.get("/api/iplscore/:matchId", async (req, res) => {
             const inn2String = inn2response.data.match(/onScoring\((.*)\)/)[1];
             const inn1Parsed = JSON.parse(inn1String);
             const inn2Parsed = JSON.parse(inn2String);
-            res.json({ success: true, scores1: inn1Parsed, scores2: inn2Parsed });
+            res.json({ success: true, matchDetails: match, scores1: inn1Parsed, scores2: inn2Parsed });
         } else {
             res.status(200).json({ success: true, message: "Match Innings not Started" });
         }
