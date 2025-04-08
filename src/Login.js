@@ -69,11 +69,10 @@ function Login() {
             });
 
             const data = await res.json();
-
             if (res.ok) {
                 localStorage.setItem("token", data.token);
-                localStorage.setItem("role", data.role);
-                localStorage.setItem("email", data.email);
+                localStorage.setItem("role", data.userData.role);
+                localStorage.setItem("email", data.userData.email);
 
                 if (data.role === "admin") {
                     navigate("/admin");
