@@ -44,6 +44,13 @@ app.get("/api/iplpointstable", async (req, res) => {
 
 app.get("/api/iplscore/:matchId", async (req, res) => {
     const matchId = req.params.matchId;
+    try {
+        const response = await axios.get("https://reactipl2025backend.vercel.app/api/iplmatches");
+        const matchData = response.data;
+        matchSummary = matchData.matches; // Update matchSummary with the fetched data
+    } catch (error) {
+        return res.status(500).json({ success: false, error: "Failed to fetch match data" });
+    }
     const match = matchSummary.find((m) => m.MatchID == matchId);
     console.log(match, "Match");
     const INN1_URL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/${matchId}-Innings1.js`;
