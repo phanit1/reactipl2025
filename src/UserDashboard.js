@@ -63,8 +63,14 @@ function UserDashboard() {
         if (schedule) {
           let pred = [];
           for (let index = 0; index < schedule.length; index++) {
-            const element = schedule[index].team1 + " vs " + schedule[index].team2 + "," + schedule[index].status + "," + schedule[index].venue;
-            pred.push(element);
+            if (schedule[index].MatchStatus === "Post") {
+              const element = schedule[index].MatchName + "," + schedule[index].Comments + "," + schedule[index].GroundName;
+              pred.push(element);
+            }
+            else if (schedule[index].MatchStatus === "UpComing") {
+              const element = schedule[index].MatchName + "," + schedule[index].MatchStatus + "," + schedule[index].GroundName;
+              pred.push(element);
+            }
           }
           setMatches(pred);
         }
@@ -76,9 +82,8 @@ function UserDashboard() {
           for (let index = 0; index < schedule.length; index++) {
             const element = schedule[index];
             let formattedDate = new Date().toISOString().split("T")[0];
-            const parsedDate = parse(element.date + " 2025", "EEE, MMM dd yyyy", new Date());
-            const formattedDate1 = format(parsedDate, "yyyy-MM-dd");
-            element["matchName"] = element.team1 + " vs " + element.team2;
+            const formattedDate1 = element.MATCH_COMMENCE_START_DATE.split(" ")[0];
+            element["matchName"] = element.MatchName;
             if (formattedDate1 === formattedDate) {
               presentMatches.push(element);
             }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./IplSchedule.css"; // Include CSS for styling
-
+import MatchInfo from "./MatchInfo"; // Import MatchInfo component
 
 // const formatDate = (dateStr) => {
 //     const [day, month, year] = dateStr.split("-"); // Split "10-04-2025" into parts
@@ -20,38 +20,15 @@ const IplSchedule = ({ schedule }) => {
     const [matchTimingFilter, setMatchTimingFilter] = useState("all");
     const [filterDate, setFilterDate] = useState("");
 
-    const teamCodes = {
-        "Sunrisers Hyderabad": "SRH",
-        "Mumbai Indians": "MI",
-        "Chennai Super Kings": "CSK",
-        "Royal Challengers Bengaluru": "RCB",
-        "Kolkata Knight Riders": "KKR",
-        "Delhi Capitals": "DC",
-        "Punjab Kings": "PBKS",
-        "Rajasthan Royals": "RR",
-        "Lucknow Super Giants": "LSG",
-        "Gujarat Titans": "GT"
-    };
-
     // Unique teams and venues for dropdowns
-    const allTeams = [...new Set(schedule.flatMap(m => [m.team1, m.team2]))];
-    const allVenues = [...new Set(schedule.map(m => m.venue))];
-
-    // // Filtered matches
-    // const filteredSchedule = schedule.filter(match => {
-    //     // let dateMatch = !filterDate || match.date === filterDate;
-    //     // console.log(formatDate(match.date), "Formatted Date")
-    //     // dateMatch = formatDate(dateMatch)
-    //     const teamMatch = !filterTeam || match.team1 === filterTeam || match.team2 === filterTeam;
-    //     const venueMatch = !filterVenue || match.venue === filterVenue;
-    //     return teamMatch && venueMatch;
-    // });
+    const allTeams = [...new Set(schedule.flatMap(m => [m.HomeTeamName, m.AwayTeamName]))];
+    const allVenues = [...new Set(schedule.map(m => m.GroundName))];
 
     const filteredSchedule = schedule.filter(match => {
-        const teamMatch = !filterTeam || match.team1 === filterTeam || match.team2 === filterTeam;
-        const venueMatch = !filterVenue || match.venue === filterVenue;
+        const teamMatch = !filterTeam || match.HomeTeamName === filterTeam || match.AwayTeamName === filterTeam;
+        const venueMatch = !filterVenue || match.GroundName === filterVenue;
 
-        const matchDate = new Date(match.date + " 2025"); // "Wed, Apr 03 2025"
+        const matchDate = new Date(match.MatchDateNew); // "Wed, Apr 03 2025"
         const today = new Date();
         const isToday = matchDate.toDateString() === today.toDateString();
         const isUpcoming = matchDate > today;
@@ -113,33 +90,23 @@ const IplSchedule = ({ schedule }) => {
 
             <div className="cards-container">
                 {filteredSchedule.map((match, index) => {
-                    const team1Code = teamCodes[match.team1];
-                    const team2Code = teamCodes[match.team2];
                     return (
                         <div key={index} className="match-card">
                             <div className="team-names">
-                                <img
-                                    src={team1Code === "DC"
-                                        ? `https://documents.iplt20.com/ipl/${team1Code}/Logos/LogoOutline/${team1Code}outline.png`
-                                        : `https://documents.iplt20.com/ipl/${team1Code}/Logos/Logooutline/${team1Code}outline.png`}
-                                    width={100}
-                                    height={100}
-                                    alt={team1Code}
-                                />
-                                <img
-                                    src={team2Code === "DC"
-                                        ? `https://documents.iplt20.com/ipl/${team2Code}/Logos/LogoOutline/${team2Code}outline.png`
-                                        : `https://documents.iplt20.com/ipl/${team2Code}/Logos/Logooutline/${team2Code}outline.png`}
-                                    width={100}
-                                    height={100}
-                                    alt={team2Code}
-                                />
+                                <img src={match.HomeTeamLogo} width={100} height={100} alt={match.HomeTeamName} />
+                                <img src={match.AwayTeamLogo} width={100} height={100} alt={match.AwayTeamName} />
                             </div>
-                            <h3>{match.team1} vs {match.team2}</h3>
-                            <p><strong>Date:</strong> {match.date}</p>
-                            <p><strong>Venue:</strong> {match.venue}</p>
-                            <p><strong>Time:</strong> {match.time}</p>
-                            <p><strong>Result:</strong> {match.status}</p>
+                            <h6>{match.MatchName}</h6>
+                            <p><strong>Date:</strong> {match.MatchDateNew}</p>
+                            <p><strong>Venue:</strong> {match.GroundName}</p>
+                            <p><strong>Time:</strong> {match.MatchTime}</p>
+                            <p><strong>Result:</strong> {match.MatchStatus === "Post" ? match.Comments : match.MatchStatus}</p>
+                            <button
+                                onClick={() => window.location.href = `/user/match-info/${match.MatchID}`}
+                                // style={{ textDecoration: "none", color: "blue", cursor: "pointer" }}
+                            >
+                                View Match Info
+                            </button>
                         </div>
                     );
                 })}
