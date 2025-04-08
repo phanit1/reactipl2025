@@ -76,6 +76,7 @@ const MatchInfo = () => {
                 </div>
             )}
             <br></br>
+            {matchInfo?.matchDetails && (
 
             <div className="innings-buttons">
                 <button
@@ -91,6 +92,7 @@ const MatchInfo = () => {
                     {matchInfo.matchDetails.SecondBattingTeamCode}'s Innings
                 </button>
             </div>
+            )}
             {selectedInnings && (
                 <div className="scorecard">
                     <div className="batting-table">
