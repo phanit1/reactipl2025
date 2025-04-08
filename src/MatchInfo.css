@@ -2,6 +2,107 @@
     padding: 20px;
     font-family: Arial, sans-serif;
   }
+  .match-info-container {
+    background: #001d52;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    font-family: 'Segoe UI', sans-serif;
+    margin-bottom: 30px;
+  }
+  
+  .scorecard-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .team-score {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .team-logo {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .score-details h1 {
+    font-size: 40px;
+    margin: 0;
+  }
+  
+  .score-details p {
+    margin: 0;
+    font-size: 16px;
+    opacity: 0.9;
+  }
+  
+  .match-center {
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  .match-id {
+    font-size: 18px;
+    background: #ffffff22;
+    padding: 4px 12px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    display: inline-block;
+  }
+  
+  .over-summary {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  
+  .over-block h4 {
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  
+  .balls {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+  
+  .ball {
+    background: #fff;
+    color: #000;
+    border-radius: 50%;
+    padding: 10px 12px;
+    font-weight: bold;
+    font-size: 14px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 34px;
+    height: 34px;
+  }
+  
+  .ball-six {
+    background-color: #8bc34a;
+  }
+  
+  .result-banner {
+    background: #3455ff;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    /* margin-top: 20px; */
+    border-radius: 8px;
+    /* font-size: 5px; */
+    width: 100%;
+  }
+  
   
   .innings-buttons {
     display: flex;
