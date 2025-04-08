@@ -38,6 +38,7 @@ app.use(express.json());
 const CRICBUZZ_URL = "https://www.cricbuzz.com/cricket-series/9237/indian-premier-league-2025/matches";
 const IPL_INFO_URL = "https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/203-matchschedule.js";
 const IPL_POINTS_TABLE_URL = "https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/stats/203-groupstandings.js";
+let matchSummary = [];
 // API Route to Scrape IPL 2025 Schedule
 // app.get("/api/iplmatches", async (req, res) => {
 //     try {
@@ -186,18 +187,66 @@ app.get("/api/iplpointstable", async (req, res) => {
 // API Route to Scrape IPL 2025 Matches (if needed)
 app.get("/api/iplscore/:matchId", async (req, res) => {
     const matchId = req.params.matchId;
+    // console.log("Match ID:", matchId);
+    // console.log("Match Summary:", matchSummary);
+    const match = matchSummary.find((m) => m.MatchID == matchId);
+    // console.log("Match Details:", match);
+    // if (!match) {
+    //     return res.status(404).json({ success: false, message: "Match not found" });
+    // }
+    // console.log(match.MatchStatus,"MatchStatus")
     const INN1_URL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/${matchId}-Innings1.js`
     const INN2_URL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/${matchId}-Innings2.js`;
     try {
-        const inn1response = await axios.get(INN1_URL);
-        console.log("IPL Inn1 Response:", inn1response.data);
-        const inn2response = await axios.get(INN2_URL);
-        console.log("IPL Inn2 Response:", inn2response.data);
-        const inn1String = inn1response.data.match(/onScoring\((.*)\)/)[1];
-        const inn2String = inn2response.data.match(/onScoring\((.*)\)/)[1];
-        const inn1Parsed = JSON.parse(inn1String);
-        const inn2Parsed = JSON.parse(inn2String);
-        res.json({ success: true, scores1: inn1Parsed, scores2: inn2Parsed });
+        if (match.MatchStatus == 'Live') {
+            // console.log("Fetching Live Match Data...");
+            try {
+                const inn1response = await axios.get(INN1_URL);
+                console.log("IPL Inn1 Response:", inn1response.data);
+                const inn1String = inn1response.data.match(/onScoring\((.*)\)/)[1];
+                const inn1Parsed = JSON.parse(inn1String);
+
+                try {
+                    const inn2response = await axios.get(INN2_URL);
+                    console.log("IPL Inn2 Response:", inn2response.data);
+                    const inn2String = inn2response.data.match(/onScoring\((.*)\)/)[1];
+                    const inn2Parsed = JSON.parse(inn2String);
+
+                    res.json({ success: true, scores1: inn1Parsed, scores2: inn2Parsed });
+                } catch (error) {
+                    console.error("Error fetching Innings 2 data:", error.message);
+                    res.json({ success: true, scores1: inn1Parsed, scores2: null });
+                }
+            } catch (error) {
+                console.error("Error fetching Innings 1 data:", error.message);
+                try {
+                    const inn2response = await axios.get(INN2_URL);
+                    console.log("IPL Inn2 Response:", inn2response.data);
+                    const inn2String = inn2response.data.match(/onScoring\((.*)\)/)[1];
+                    const inn2Parsed = JSON.parse(inn2String);
+
+                    res.json({ success: true, scores1: null, scores2: inn2Parsed });
+                } catch (error) {
+                    console.error("Error fetching Innings 2 data:", error.message);
+                    res.json({ success: true, scores1: null, scores2: null });
+                }
+            }
+        }
+        else if (match.MatchStatus == 'Post') {
+            const inn1response = await axios.get(INN1_URL);
+            console.log("IPL Inn1 Response:", inn1response.data);
+            const inn2response = await axios.get(INN2_URL);
+            console.log("IPL Inn2 Response:", inn2response.data);
+            const inn1String = inn1response.data.match(/onScoring\((.*)\)/)[1];
+            const inn2String = inn2response.data.match(/onScoring\((.*)\)/)[1];
+            const inn1Parsed = JSON.parse(inn1String);
+            const inn2Parsed = JSON.parse(inn2String);
+            res.json({ success: true, scores1: inn1Parsed, scores2: inn2Parsed });
+        }
+        else {
+            res.status(200).json({ success: true, message: "Match Innings not Started" });
+        }
+
     } catch (error) {
         console.error("Error fetching IPL scores:", error.message);
         res.status(500).json({ success: false, error: error.message });
@@ -210,7 +259,7 @@ app.get("/api/iplmatches", async (req, res) => {
         const iplinforesponse = await axios.get(IPL_INFO_URL);
         const jsonString = iplinforesponse.data.match(/MatchSchedule\((.*)\)/)[1];
         const parsed = JSON.parse(jsonString);
-        const matchSummary = parsed.Matchsummary.sort((a, b) => new Date(a.MatchDateNew) - new Date(b.MatchDateNew));
+        matchSummary = parsed.Matchsummary.sort((a, b) => new Date(a.MatchDateNew) - new Date(b.MatchDateNew));
         res.json({ success: true, matches: matchSummary });
     } catch (error) {
         console.error("Error fetching IPL Info:", error.message);
