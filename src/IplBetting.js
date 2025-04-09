@@ -69,7 +69,11 @@ const IplBetting = ({ presentMatches }) => {
     if (selectedBetTypes.includes("max")) message += `\n• Max Score Prediction: ${maxScore}`;
     if (selectedBetTypes.includes("min")) message += `\n• Min Score Prediction: ${minScore}`;
     message += `\n• Bet Amount: ₹${betAmount}`;
-
+    setSelectedMatch("");
+    setSelectedBetTypes([]);
+    setTossBet("");
+    setWinnerBet("");
+    setBetAmount("");
     alert(message);
   };
 
