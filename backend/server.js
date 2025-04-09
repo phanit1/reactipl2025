@@ -151,7 +151,7 @@ app.post("/api/login", async (req, res) => {
     }
 });
 
-app.post("/create-order", async (req, res) => {
+app.post("/api/create-order", async (req, res) => {
     const { amount } = req.body;
   
     try {
