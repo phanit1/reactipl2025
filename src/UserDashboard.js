@@ -3,12 +3,12 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import IplSchedule from "./IPLSchedule";
-import { format, parse } from 'date-fns';
 import IplPointsTable from './IPLPointsTable';
 import IplBetting from './IplBetting';
 import IPLPrediction from './IPLPrediction';
 import IplHomePage from './IplHomePage';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import './UserDashboard.css';
 
 
 function UserDashboard() {
@@ -63,15 +63,17 @@ function UserDashboard() {
         if (schedule) {
           let pred = [];
           for (let index = 0; index < schedule.length; index++) {
-            if (schedule[index].MatchStatus === "Post") {
-              const element = schedule[index].MatchName + "," + schedule[index].Comments + "," + schedule[index].GroundName;
+            // console.log(schedule[index], "Each Match in Scgedule")
+            if (schedule[index].MatchStatus === 'Post') {
+              const element = schedule[index].MatchName + "," + schedule[index].Comments.split(" Won")[0] + "," + schedule[index].GroundName;
               pred.push(element);
             }
-            else if (schedule[index].MatchStatus === "UpComing") {
+            else if (schedule[index].MatchStatus === 'UpComing') {
               const element = schedule[index].MatchName + "," + schedule[index].MatchStatus + "," + schedule[index].GroundName;
               pred.push(element);
             }
           }
+          // console.log(pred, "Predictions")
           setMatches(pred);
         }
       }, [schedule]);

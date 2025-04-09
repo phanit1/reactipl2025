@@ -1,207 +1,314 @@
 .match-container {
-    padding: 20px;
-    font-family: Arial, sans-serif;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+.match-info-container {
+  background: #001d52;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  font-family: 'Segoe UI', sans-serif;
+  margin-bottom: 30px;
+}
+
+.scorecard-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.team-score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.teamlogo {
+  width: 150px;
+  height: 150px;
+}
+
+.score-details h1 {
+  font-size: 36px;
+  margin: 0;
+}
+
+.score-details p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.match-center {
+  text-align: center;
+  font-size: 14px;
+}
+
+.match-id {
+  font-size: 16px;
+  background: #ffffff22;
+  padding: 4px 12px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+.over-summary {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.over-block h4 {
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.balls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.ball {
+  background: #fff;
+  color: #000;
+  border-radius: 50%;
+  padding: 10px 12px;
+  font-weight: bold;
+  font-size: 14px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 34px;
+  height: 34px;
+}
+
+.ball-six {
+  background-color: #8bc34a;
+}
+
+.result-banner {
+  background: #3455ff;
+  color: white;
+  padding: 12px;
+  text-align: center;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.innings-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.team-button,
+.back-button {
+  padding: 10px 20px;
+  background-color: #0057b7;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.scorecard {
+  margin-top: 20px;
+}
+
+.batting-table {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #ccc;
+}
+
+@media (max-width: 768px) {
+  .batting-table .table-header,
+  .batting-table .table-row {
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
   }
-  .match-info-container {
-    background: #001d52;
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    font-family: 'Segoe UI', sans-serif;
-    margin-bottom: 30px;
+}
+
+@media (max-width: 480px) {
+  .batting-table .table-header,
+  .batting-table .table-row {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
-  
-  .scorecard-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
+}
+
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.table-header {
+  font-weight: bold;
+  background: #f6f6f6;
+  color: black;
+}
+
+.batter-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.player-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.player-name {
+  font-weight: bold;
+}
+
+.player-role {
+  font-size: 12px;
+  color: #888;
+}
+
+.out-desc {
+  font-size: 13px;
+  color: '#000';
+}
+
+.bowling-table {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  border-top: 1px solid #ccc;
+}
+
+.bowling-table .table-header,
+.bowling-table .table-row {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.bowling-table .table-header {
+  font-weight: bold;
+  background: #f8f8f8;
+  color: 'white'
+}
+
+.bowling-table .player-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.bowling-table .batter-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.no-innings-message {
+  text-align: center;
+  font-size: 18px;
+  color: #fff;
+  margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .teamlogo {
+    width: 10vw;
+    height: 10vh;
   }
-  
-  .team-score {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .team-logo {
-    width: 250px;
-    height: 250px;
-  }
-  
+
   .score-details h1 {
-    font-size: 40px;
-    margin: 0;
+    font-size: 5vw;
   }
-  
-  .score-details p {
-    margin: 0;
-    font-size: 16px;
-    opacity: 0.9;
-  }
-  
-  .match-center {
-    text-align: center;
-    font-size: 14px;
-  }
-  
-  .match-id {
-    font-size: 18px;
-    background: #ffffff22;
-    padding: 4px 12px;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    display: inline-block;
-  }
-  
-  .over-summary {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
-  }
-  
-  .over-block h4 {
-    margin-bottom: 8px;
-    text-align: center;
-  }
-  
-  .balls {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-  }
-  
+
   .ball {
-    background: #fff;
-    color: #000;
-    border-radius: 50%;
-    padding: 10px 12px;
-    font-weight: bold;
-    font-size: 14px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    min-width: 34px;
-    height: 34px;
+    padding: 2vw 2.5vw;
+    font-size: 2vw;
+    min-width: 5vw;
+    height: 5vw;
   }
-  
-  .ball-six {
-    background-color: #8bc34a;
-  }
-  
-  .result-banner {
-    background: #3455ff;
-    color: white;
-    padding: 12px;
-    text-align: center;
-    /* margin-top: 20px; */
-    border-radius: 8px;
-    /* font-size: 5px; */
-    width: 100%;
-  }
-  
-  
-  .innings-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 20px;
-  }
-  
+
   .team-button,
   .back-button {
-    padding: 10px 20px;
-    background-color: #0057b7;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    font-size: 16px;
-    cursor: pointer;
+    font-size: 2.5vw;
+    padding: 2vw 4vw;
   }
-  
-  .scorecard {
-    margin-top: 20px;
-  }
-  
-  .batting-table {
-    display: flex;
-    flex-direction: column;
-    border-top: 1px solid #ccc;
-  }
-  
+
   .table-header,
   .table-row {
-    display: grid;
-    grid-template-columns: 3fr 1fr 1fr 1fr 1fr 1fr;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
   }
-  
-  .table-header {
-    font-weight: bold;
-    background: #f6f6f6;
-  }
-  
-  .batter-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .player-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
-  
-  .player-name {
-    font-weight: bold;
-  }
-  
-  .player-role {
-    font-size: 12px;
-    color: #888;
-  }
-  
-  .out-desc {
-    font-size: 13px;
-    color: #888;
-  }
-  .bowling-table {
-    display: flex;
-    flex-direction: column;
-    margin-top: 30px;
-    border-top: 1px solid #ccc;
-  }
-  
+
   .bowling-table .table-header,
   .bowling-table .table-row {
-    display: grid;
-    grid-template-columns: 3fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
   }
-  
-  .bowling-table .table-header {
-    font-weight: bold;
-    background: #f8f8f8;
+
+  .score-details h1 {
+    font-size: 28px;
   }
-  
-  .bowling-table .player-img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    margin-right: 8px;
+
+  .over-summary {
+    gap: 20px;
   }
-  
-  .bowling-table .batter-info {
-    display: flex;
-    align-items: center;
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  }
+
+  .bowling-table .table-header,
+  .bowling-table .table-row {
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .teamlogo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .score-details h1 {
+    font-size: 24px;
+  }
+
+  .innings-buttons {
+    flex-direction: column;
     gap: 10px;
   }
-    
+
+  .team-button,
+  .back-button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+
+  .bowling-table .table-header,
+  .bowling-table .table-row {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+}

@@ -1,0 +1,9 @@
+body {
+    background-image: url('https://www.iplt20.com/assets/images/ap-match-result-homepage.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    /* color: #fff; */
+    color: black;
+}

@@ -6,7 +6,7 @@ import API_KEY from "./config";
 export default function IPLPrediction({ matches }) {
     const [predictions, setPredictions] = useState([]);
     const [loading, setLoading] = useState(false);
-    const APIKey = API_KEY.API_KEY; // Replace with your actual API key
+    let APIKey = API_KEY.API_KEY; // Replace with your actual API key
     const BASE_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent";
 
     useEffect(() => {
@@ -15,9 +15,9 @@ export default function IPLPrediction({ matches }) {
 
             setLoading(true);
             try {
-                const matchesResult = matches.map((match) => match.split(",")[1]);
+                const matchWinners = matches.map((match) => match.split(",")[1]);
                 const matchesVenue = matches.map((match) => match.split(",")[2]);
-                matches = matches.map((match) => match.split(",")[0]);
+                const matchNames = matches.map((match) => match.split(",")[0]);
                 const content = `You are an AI cricket analyst predicting IPL 2025 match outcomes. Here are the upcoming matches: ${matches}.
                 For each match, provide a List of JSON objects as response in the following format: 
                 [{"team1": "Chennai Super Kings", "team2": "Mumbai Indians", "winner": "Mumbai Indians", "probability": "65%"} , {"team1": "Kolkata Knight Riders", "team2": "Royal Challengers Bengaluru", "winner": "Royal Challengers Bengaluru", "probability": "53%"} ]`;
@@ -37,16 +37,10 @@ export default function IPLPrediction({ matches }) {
                 const result = JSON.parse(JSON.stringify(rawOutput)); // Convert to JSON
                 const res = result.split("```json")[1].split("```")[0];
                 let res1 = JSON.parse(res);
-                res1.map((r, index) => {
-                    if (r.team1 + " vs " + r.team2 === matches[index]) {
-                        if (matchesResult) {
-                            if (matchesResult[index].includes(" won")) {
-                                r.Result = matchesResult[index].split(" won")[0];
-                            } else {
-                                r.Result = "Upcoming";
-                            }
-                            r.Venue = matchesVenue[index];
-                        }
+                res1.forEach((r, index) => {
+                    if (r.team1 + " vs " + r.team2 === matchNames[index]) {
+                        r.Venue = matchesVenue[index];
+                        r.Result = matchWinners[index];
                     }
                 });
                 setPredictions(res1);
