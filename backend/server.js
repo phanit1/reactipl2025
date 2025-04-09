@@ -4,6 +4,8 @@ const cheerio = require("cheerio");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const Razorpay = require("razorpay");
+const Keys = require("./config.json");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -13,6 +15,7 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true },
     role: { type: String, enum: ["user", "admin"], default: "user" },
 });
+
 const User = mongoose.model("User", UserSchema);
 
 UserSchema.pre("save", async function (next) {
@@ -21,6 +24,11 @@ UserSchema.pre("save", async function (next) {
     this.password = await bcrypt.hash(this.password, salt);
     next();
 });
+
+const razorpay = new Razorpay({
+    key_id: Keys.RAZORPAY_KEY_ID,
+    key_secret: Keys.RAZORPAY_SECRET,
+  });
 
 app.use(cors());
 app.use(express.json());
@@ -142,6 +150,25 @@ app.post("/api/login", async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 });
+
+app.post("/create-order", async (req, res) => {
+    const { amount } = req.body;
+  
+    try {
+      const options = {
+        amount: amount * 100, // convert to paise
+        currency: "INR",
+        receipt: `receipt_${Date.now()}`
+      };
+  
+      const order = await razorpay.orders.create(options);
+      res.status(200).json(order);
+    } catch (err) {
+      res.status(500).json({ error: "Payment order creation failed" });
+    }
+  });
+  
+
 
 const url = "mongodb+srv://ppaproject:Teamwork12@sample-sxout.mongodb.net/IPLUsersDB?retryWrites=true&w=majority";
 

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "./IplBetting.css";
+import Keys from "./config.json"
 
 const IplBetting = ({ presentMatches }) => {
   const [selectedMatch, setSelectedMatch] = useState("");
@@ -12,27 +14,55 @@ const IplBetting = ({ presentMatches }) => {
 
   const handleBetTypeChange = (type) => {
     setSelectedBetTypes((prev) =>
-      prev.includes(type)
-        ? prev.filter((t) => t !== type)
-        : [...prev, type]
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
     );
   };
 
-  const handleBetAmountChange = (e) => {
-    let value = e.replace(/[^0-9]/g, "");
-    if (parseInt(value, 10) > 1000) {
-      alert("Bet amount cannot exceed ₹1000. We care about our customers' safety and money.");
-      value = "1000";
+  const handleBetAmountChange = (value) => {
+    let val = value.replace(/[^0-9]/g, "");
+    if (parseInt(val, 10) > 1000) {
+      alert("Bet amount cannot exceed ₹1000.");
+      val = "1000";
     }
-    setBetAmount(value);
+    setBetAmount(val);
   };
 
-  const handleBet = () => {
+  const handlePaymentAndPlaceBet = async () => {
     if (!selectedMatch || selectedBetTypes.length === 0 || !betAmount) {
       alert("Please complete all required fields.");
       return;
     }
 
+    try {
+      const { data } = await axios.post("http://localhost:5000/create-order", {
+        amount: betAmount,
+      });
+
+      const options = {
+        key: Keys.REACT_APP_RAZORPAY_KEY,
+        amount: data.amount,
+        currency: "INR",
+        name: "Betting App",
+        description: "Betting Credits",
+        order_id: data.id,
+        handler: function (response) {
+          console.log("Payment Success:", response);
+          placeBet(); // Place the bet only after successful payment
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (err) {
+      console.error("Payment error:", err);
+      alert("Something went wrong during payment.");
+    }
+  };
+
+  const placeBet = () => {
     let message = `✅ Bet placed:\n• Match: ${selectedMatch}`;
     if (selectedBetTypes.includes("toss")) message += `\n• Toss Winner: ${tossBet}`;
     if (selectedBetTypes.includes("winner")) message += `\n• Match Winner: ${winnerBet}`;
@@ -86,7 +116,8 @@ const IplBetting = ({ presentMatches }) => {
               />
               Match Winner
             </label>
-            {/* <label>
+            {/* Uncomment if needed
+            <label>
               <input
                 type="checkbox"
                 checked={selectedBetTypes.includes("max")}
@@ -108,10 +139,7 @@ const IplBetting = ({ presentMatches }) => {
         {selectedBetTypes.includes("toss") && (
           <div>
             <label>Toss Winner:</label>
-            <select
-              value={tossBet}
-              onChange={(e) => setTossBet(e.target.value)}
-            >
+            <select value={tossBet} onChange={(e) => setTossBet(e.target.value)}>
               <option value="">Select a team</option>
               {currentTeams?.map((team, index) => (
                 <option key={index} value={team.trim()}>
@@ -125,10 +153,7 @@ const IplBetting = ({ presentMatches }) => {
         {selectedBetTypes.includes("winner") && (
           <div>
             <label>Match Winner:</label>
-            <select
-              value={winnerBet}
-              onChange={(e) => setWinnerBet(e.target.value)}
-            >
+            <select value={winnerBet} onChange={(e) => setWinnerBet(e.target.value)}>
               <option value="">Select a team</option>
               {currentTeams?.map((team, index) => (
                 <option key={index} value={team.trim()}>
@@ -138,30 +163,6 @@ const IplBetting = ({ presentMatches }) => {
             </select>
           </div>
         )}
-
-        {/* {selectedBetTypes.includes("max") && (
-          <div>
-            <label>Max Score Prediction:</label>
-            <input
-              type="number"
-              placeholder="e.g. 220"
-              value={maxScore}
-              onChange={(e) => setMaxScore(e.target.value)}
-            />
-          </div>
-        )} */}
-
-        {/* {selectedBetTypes.includes("min") && (
-          <div>
-            <label>Min Score Prediction:</label>
-            <input
-              type="number"
-              placeholder="e.g. 120"
-              value={minScore}
-              onChange={(e) => setMinScore(e.target.value)}
-            />
-          </div>
-        )} */}
 
         <div>
           <label>Bet Amount (₹):</label>
@@ -174,8 +175,8 @@ const IplBetting = ({ presentMatches }) => {
         </div>
 
         <div>
-          <button type="submit" onClick={handleBet}>
-            Place Bet
+          <button type="submit" onClick={handlePaymentAndPlaceBet}>
+            Pay & Place Bet
           </button>
         </div>
       </form>
