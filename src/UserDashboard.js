@@ -106,8 +106,6 @@ function UserDashboard() {
                 return <IPLPrediction matches={matches} />;
             case 'betting': 
                 return <IplBetting presentMatches={presentMatches} />;
-            case 'livescore':
-                return <div><h2>Live Score</h2></div>;
             default:
                 return <IplHomePage />;
         }
@@ -131,8 +129,6 @@ function UserDashboard() {
                             <Nav.Link onClick={() => setContent('points')}>Points Table</Nav.Link>
                             <Nav.Link onClick={() => setContent('predictions')}>Predictions</Nav.Link>
                             <Nav.Link onClick={() => setContent('betting')}>Betting</Nav.Link>
-                            <Nav.Link onClick={() => setContent('livescore')}>Live Score</Nav.Link>
-
                         </Nav>
                     </Navbar.Collapse>
                 </Container>

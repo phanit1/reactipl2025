@@ -34,7 +34,7 @@ const IplBetting = ({ presentMatches }) => {
     }
 
     try {
-      const { data } = await axios.post("http://localhost:5000/create-order", {
+      const { data } = await axios.post("https://reactipl2025backend.vercel.app/api/create-order", {
         amount: betAmount,
       });
 
