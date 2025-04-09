@@ -91,7 +91,7 @@ const MatchInfo = () => {
                         </button>
                     </div>
                 )}
-                {selectedInnings && (
+                {matchInfo?.matchDetails && selectedInnings && (
                     <div className="scorecard">
                         <div className="batting-table responsive-table">
                             <div className="table-header">
