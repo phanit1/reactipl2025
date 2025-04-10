@@ -72,7 +72,7 @@ const MatchInfo = () => {
                         </div>
                     </div>
                     <div className='row'>
-                        <div className='col-6'>
+                        <div className='col-md-6 mb-3'>
                             <div className="match-info-container">
                                 <h2 className="title">Match Info</h2>
                                 <div className="info-grid">
@@ -97,7 +97,7 @@ const MatchInfo = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className='col-6'>
+                        <div className='col-md-6 mb-3'>
                             <HeadToHead data={matchInfo} />
                         </div>
                     </div>
