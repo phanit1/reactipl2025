@@ -47,7 +47,7 @@ const IplBetting = ({ presentMatches }) => {
         description: "Betting Credits",
         order_id: data.id,
         handler: function (response) {
-          console.log("Payment Success:", response);
+          // console.log("Payment Success:", response);
           placeBet(); // Place the bet only after successful payment
         },
         theme: {
@@ -71,12 +71,12 @@ const IplBetting = ({ presentMatches }) => {
     // if (selectedBetTypes.includes("min")) message += `\n• Min Score Prediction: ${minScore}`;
     // message += `\n• Bet Amount: ₹${betAmount}`;
     const bets = [];
-    console.log("Selected Bet Types:", selectedBetTypes);
+    // console.log("Selected Bet Types:", selectedBetTypes);
     if (selectedBetTypes.includes("toss") && tossBet)
       bets.push({ type: "toss", betOn: tossBet });
     if (selectedBetTypes.includes("winner") && winnerBet)
       bets.push({ type: "winner", betOn: winnerBet });
-    console.log("Bets:", bets);
+    // console.log("Bets:", bets);
     const betPayload = {
       email,
       matchName: selectedMatch,
@@ -84,7 +84,7 @@ const IplBetting = ({ presentMatches }) => {
       amount: parseInt(betAmount),
       createdAt: new Date().toISOString()
     };
-    console.log("Bet Payload:", betPayload);
+    // console.log("Bet Payload:", betPayload);
     try {
       if (!betPayload.bets.length) {
       alert("Please select valid bet options.");
