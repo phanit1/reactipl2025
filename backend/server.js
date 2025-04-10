@@ -77,6 +77,7 @@ app.get("/api/iplscore/:matchId", async (req, res) => {
     const match = matchSummary.find((m) => m.MatchID == matchId);
     const INN1_URL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/${matchId}-Innings1.js`;
     const INN2_URL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/${matchId}-Innings2.js`;
+    const HEADTOHEADURL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/stats/match/${matchId}-headTohead.js`;
 
     try {
         if (match.MatchStatus == 'Live') {
@@ -114,7 +115,11 @@ app.get("/api/iplscore/:matchId", async (req, res) => {
             const inn2Parsed = JSON.parse(inn2String);
             res.json({ success: true, matchDetails: match, scores1: inn1Parsed, scores2: inn2Parsed });
         } else {
-            res.status(200).json({ success: true, matchDetails: match, message: "Match Innings not Started" });
+            const headtoheadresponse = await axios.get(HEADTOHEADURL);
+            const headtoheadString = headtoheadresponse.data.match(/onMatchHTH\((.*)\)/)[1];
+            const headtoheadParsed = JSON.parse(headtoheadString);
+            const headToHead = headtoheadParsed.HeadToHead;
+            res.status(200).json({ success: true, matchDetails: match, headToHead: headToHead, message: "Match Innings not Started" });
         }
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
