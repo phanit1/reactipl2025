@@ -1,114 +1,42 @@
-/* src/components/AdminPanel.css */
-
-.admin-panel {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 20px;
-    font-family: 'Poppins', sans-serif;
+.admin-dashboard {
+  padding: 2rem;
+  color: #fff;
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.admin-table th,
+.admin-table td {
+  border: 1px solid #ccc;
+  padding: 12px;
+  text-align: center;
+  color: #fff;
+}
+.admin-table th {
+  background-color: #1e3a8a;
+  color: white;
+}
+@media (max-width: 768px) {
+  .admin-table {
+    font-size: 14px;
   }
-  
-  .admin-panel h2 {
-    text-align: center;
-    font-size: 2.5rem;
-    color: #1f2937;
-    margin-bottom: 40px;
-  }
-  
-  .logout-btn {
-    display: inline-block;
-    margin-bottom: 20px;
-    padding: 10px 20px;
-    border: 2px solid #111827;
-    background: transparent;
-    color: #111827;
-    font-weight: 600;
-    border-radius: 8px;
-    transition: 0.3s ease;
-    cursor: pointer;
-  }
-  
-  .logout-btn:hover {
-    background-color: #111827;
-    color: #ffffff;
-  }
-  
-  .user-section {
-    background-color: #f9fafb;
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  }
-  
-  .user-section h4 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #2563eb;
-    margin-bottom: 15px;
-    border-left: 5px solid #2563eb;
-    padding-left: 12px;
-  }
-  
-  .bets-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  
-  .bets-table th,
-  .bets-table td {
-    padding: 14px 18px;
-    text-align: left;
-    font-size: 0.95rem;
-  }
-  
-  .bets-table th {
-    background-color: #1e3a8a;
-    color: #ffffff;
-    font-weight: 600;
-  }
-  
-  .bets-table td {
-    background-color: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
-  }
-  
-  .bets-table tr:last-child td {
-    border-bottom: none;
-  }
-  
-  .bets-table tr:hover td {
-    background-color: #f3f4f6;
-    transition: background-color 0.2s ease-in-out;
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    .bets-table th,
-    .bets-table td {
-      font-size: 0.85rem;
-      padding: 12px 14px;
-    }
-  
-    .admin-panel h2 {
-      font-size: 1.8rem;
-    }
-  
-    .logout-btn {
-      font-size: 0.9rem;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .bets-table {
-      display: block;
-      overflow-x: auto;
-      white-space: nowrap;
-    }
-  
-    .user-section {
-      padding: 20px;
-    }
-  }
-  
+}
+.view-buttons {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  gap: 20px;
+}
+.admin-button {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 0 5px;
+}
+.admin-button:hover {
+  background-color: #2563eb;
+}

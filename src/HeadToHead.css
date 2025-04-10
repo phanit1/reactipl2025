@@ -1,0 +1,84 @@
+.head-to-head-container {
+    padding: 2rem;
+  background: linear-gradient(to right, #001F54, #003366); /* matches your theme */
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 800px;
+  margin: auto;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.subtext {
+    color: #ccc;
+    font-size: 14px;
+}
+
+.head-to-head-box {
+  display: flex;
+  margin-top: 12px;
+}
+
+.total-matches {
+    color: #00b4d8;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.total-matches h2 {
+  margin: 0;
+}
+
+.teams-info {
+  flex: 1;
+  padding-left: 12px;
+}
+
+.team-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.team-name {
+    color: #00b4d8;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.team-name img {
+  width: 24px;
+  height: 24px;
+  margin-right: 6px;
+}
+
+.progress-bar {
+  background: #f0f0f0;
+  flex: 1;
+  height: 6px;
+  margin: 0 8px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+}
+
+.rcb {
+  background: #222;
+}
+
+.dc {
+  background: #1e1ebf;
+}
+
+.no-result {
+  background: gray;
+}
+
+.wins {
+    color: #00b4d8;
+    font-weight: 600;
+    font-size: 12px;
+}

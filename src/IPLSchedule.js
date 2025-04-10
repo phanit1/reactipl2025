@@ -8,37 +8,37 @@ const IplSchedule = ({ schedule }) => {
     const [filterDate, setFilterDate] = useState("");
     let allTeams = [];
     let allVenues = [];
+    let filteredSchedule = schedule || [];
 
     if (schedule) {
         allTeams = [...new Set(schedule.flatMap(m => [m.HomeTeamName, m.AwayTeamName]))];
         allVenues = [...new Set(schedule.map(m => m.GroundName))];
+        filteredSchedule = schedule.filter(match => {
+            const teamMatch = !filterTeam || match.HomeTeamName === filterTeam || match.AwayTeamName === filterTeam;
+            const venueMatch = !filterVenue || match.GroundName === filterVenue;
+    
+            const matchDate = new Date(match.MatchDateNew);
+            const today = new Date();
+            const isToday = matchDate.toDateString() === today.toDateString();
+            const isUpcoming = matchDate > today;
+            const isPast = matchDate < today;
+    
+            let dateMatch = true;
+            if (filterDate) {
+                const selectedDate = new Date(filterDate);
+                dateMatch = matchDate.toDateString() === selectedDate.toDateString();
+            }
+    
+            let timingMatch = true;
+            if (!filterDate) {
+                if (matchTimingFilter === "today") timingMatch = isToday;
+                else if (matchTimingFilter === "upcoming") timingMatch = isUpcoming;
+                else if (matchTimingFilter === "past") timingMatch = isPast;
+            }
+    
+            return teamMatch && venueMatch && dateMatch && timingMatch;
+        });
     }
-
-    const filteredSchedule = schedule.filter(match => {
-        const teamMatch = !filterTeam || match.HomeTeamName === filterTeam || match.AwayTeamName === filterTeam;
-        const venueMatch = !filterVenue || match.GroundName === filterVenue;
-
-        const matchDate = new Date(match.MatchDateNew);
-        const today = new Date();
-        const isToday = matchDate.toDateString() === today.toDateString();
-        const isUpcoming = matchDate > today;
-        const isPast = matchDate < today;
-
-        let dateMatch = true;
-        if (filterDate) {
-            const selectedDate = new Date(filterDate);
-            dateMatch = matchDate.toDateString() === selectedDate.toDateString();
-        }
-
-        let timingMatch = true;
-        if (!filterDate) {
-            if (matchTimingFilter === "today") timingMatch = isToday;
-            else if (matchTimingFilter === "upcoming") timingMatch = isUpcoming;
-            else if (matchTimingFilter === "past") timingMatch = isPast;
-        }
-
-        return teamMatch && venueMatch && dateMatch && timingMatch;
-    });
 
     return (
         <div className="ipl-schedule-container scrollable-container">

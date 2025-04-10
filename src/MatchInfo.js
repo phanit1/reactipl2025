@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './MatchInfo.css';
+import MatchCountdown from './MatchCountdown';
+import HeadToHead from './HeadToHead'; // Adjust path if it's in a different folder
 
 const MatchInfo = () => {
     const matchId = window.location.pathname.split('/').pop();
@@ -33,7 +35,74 @@ const MatchInfo = () => {
     return (
         <>
             {matchInfo?.message === "Match Innings not Started" ? (
-                <div className="no-innings-message">Match innings have not started yet.</div>
+                <div className="no-innings-message">
+                    <div className="scorecard-box">
+                        <div className="team-score">
+                            <img
+                                src={`https://scores.iplt20.com/ipl/teamlogos/${matchInfo.matchDetails.FirstBattingTeamCode}.png`}
+                                alt={matchInfo.matchDetails.FirstBattingTeamCode}
+                                className="teamlogo"
+                            />
+                            <div className="score-details">
+                                <h1>{matchInfo.matchDetails.FirstBattingTeamCode}</h1>
+                            </div>
+                        </div>
+
+                        <div className="match-center">
+                            <p className="match-id">{matchInfo.matchDetails.MatchOrder}</p>
+                            <p>{matchInfo.matchDetails.GroundName}</p>
+                            <p>{matchInfo.matchDetails.MatchDateNew} &bull; {matchInfo.matchDetails.MatchTime} IST</p>
+                        </div>
+
+                        <div className="team-score">
+                            <div className="score-details">
+                                <h1>{matchInfo.matchDetails.SecondBattingTeamCode}</h1>
+                            </div>
+                            <img
+                                src={`https://scores.iplt20.com/ipl/teamlogos/${matchInfo.matchDetails.SecondBattingTeamCode}.png`}
+                                alt={matchInfo.matchDetails.SecondBattingTeamCode}
+                                className="teamlogo"
+                            />
+                        </div>
+                        <div className="result-banner">
+                            {/* <h5>Match yet to start</h5> */}
+                            <div className="match-status-box">
+                                <MatchCountdown startTime={matchInfo.matchDetails.MATCH_COMMENCE_START_DATE.replace(' ', 'T')} />
+                            </div>
+                        </div>
+                    </div>
+                    <div className='row'>
+                        <div className='col-6'>
+                            <div className="match-info-container">
+                                <h2 className="title">Match Info</h2>
+                                <div className="info-grid">
+                                    <div className="info-label">Venue</div>
+                                    <div className="info-value">
+                                        <span className="highlight">{matchInfo.matchDetails.GroundName}</span>
+                                        <br />
+                                        <span className="subtext">{matchInfo.matchDetails.city}</span>
+                                    </div>
+
+                                    <div className="info-label">On Field Umpires</div>
+                                    <div className="info-value">
+                                        <span className="highlight">{matchInfo.matchDetails.GroundUmpire1}</span>
+                                        <span className="divider">|</span>
+                                        <span className="highlight">{matchInfo.matchDetails.GroundUmpire2}</span>
+                                    </div>
+
+                                    <div className="info-label">Third Umpire</div>
+                                    <div className="info-value">
+                                        <span className="highlight">{matchInfo.matchDetails.ThirdUmpire}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='col-6'>
+                            <HeadToHead data={matchInfo} />
+                        </div>
+                    </div>
+
+                </div>
             ) : <div className="match-container">
                 {matchInfo?.matchDetails && (
                     <div className="scorecard-box">

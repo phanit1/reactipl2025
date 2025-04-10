@@ -11,6 +11,7 @@ const IplBetting = ({ presentMatches }) => {
   const [maxScore, setMaxScore] = useState("");
   const [minScore, setMinScore] = useState("");
   const [betAmount, setBetAmount] = useState("");
+  const email = localStorage.getItem("email");
 
   const handleBetTypeChange = (type) => {
     setSelectedBetTypes((prev) =>
@@ -40,7 +41,7 @@ const IplBetting = ({ presentMatches }) => {
 
       const options = {
         key: Keys.REACT_APP_RAZORPAY_KEY,
-        amount: data.amount,
+        amount: betAmount,
         currency: "INR",
         name: "Betting App",
         description: "Betting Credits",
@@ -62,19 +63,47 @@ const IplBetting = ({ presentMatches }) => {
     }
   };
 
-  const placeBet = () => {
-    let message = `✅ Bet placed:\n• Match: ${selectedMatch}`;
-    if (selectedBetTypes.includes("toss")) message += `\n• Toss Winner: ${tossBet}`;
-    if (selectedBetTypes.includes("winner")) message += `\n• Match Winner: ${winnerBet}`;
-    if (selectedBetTypes.includes("max")) message += `\n• Max Score Prediction: ${maxScore}`;
-    if (selectedBetTypes.includes("min")) message += `\n• Min Score Prediction: ${minScore}`;
-    message += `\n• Bet Amount: ₹${betAmount}`;
+  const placeBet = async() => {
+    // let message = `✅ Bet placed:\n• Match: ${selectedMatch}`;
+    // if (selectedBetTypes.includes("toss")) message += `\n• Toss Winner: ${tossBet}`;
+    // if (selectedBetTypes.includes("winner")) message += `\n• Match Winner: ${winnerBet}`;
+    // if (selectedBetTypes.includes("max")) message += `\n• Max Score Prediction: ${maxScore}`;
+    // if (selectedBetTypes.includes("min")) message += `\n• Min Score Prediction: ${minScore}`;
+    // message += `\n• Bet Amount: ₹${betAmount}`;
+    const bets = [];
+    console.log("Selected Bet Types:", selectedBetTypes);
+    if (selectedBetTypes.includes("toss") && tossBet)
+      bets.push({ type: "toss", betOn: tossBet });
+    if (selectedBetTypes.includes("winner") && winnerBet)
+      bets.push({ type: "winner", betOn: winnerBet });
+    console.log("Bets:", bets);
+    const betPayload = {
+      email,
+      matchName: selectedMatch,
+      bets,
+      amount: parseInt(betAmount),
+      createdAt: new Date().toISOString()
+    };
+    console.log("Bet Payload:", betPayload);
+    try {
+      if (!betPayload.bets.length) {
+      alert("Please select valid bet options.");
+      return;
+      }
+
+      await axios.post("http://localhost:5000/api/iplbidding", betPayload);
+      alert("✅ Bet placed and payment successful!");
+    } catch (error) {
+      console.error("Error placing bet:", error);
+      alert("❌ Failed to place the bet. Please try again.", error.message);
+    }
+
     setSelectedMatch("");
     setSelectedBetTypes([]);
     setTossBet("");
     setWinnerBet("");
     setBetAmount("");
-    alert(message);
+    // alert(message);
   };
 
   const currentTeams = selectedMatch
