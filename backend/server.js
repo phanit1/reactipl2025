@@ -18,6 +18,21 @@ const UserSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", UserSchema);
 
+const BetDetailSchema = new mongoose.Schema({
+    type: { type: String },
+    betOn: { type: String}
+});
+
+const BiddingSchema = new mongoose.Schema({
+    email: { type: String, required: true },
+    matchName: { type: String, required: true },
+    bets: { type: [BetDetailSchema], required: true },
+    amount: { type: Number, required: true },
+    createdAt: { type: Date, default: Date.now }
+});
+
+const Bidding = mongoose.model("Bidding", BiddingSchema);
+
 UserSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
     const salt = await bcrypt.genSalt(10);
@@ -28,7 +43,7 @@ UserSchema.pre("save", async function (next) {
 const razorpay = new Razorpay({
     key_id: Keys.RAZORPAY_KEY_ID,
     key_secret: Keys.RAZORPAY_SECRET,
-  });
+});
 
 app.use(cors());
 app.use(express.json());
@@ -55,12 +70,11 @@ app.get("/api/iplscore/:matchId", async (req, res) => {
     try {
         const response = await axios.get("https://reactipl2025backend.vercel.app/api/iplmatches");
         const matchData = response.data;
-        matchSummary = matchData.matches; // Update matchSummary with the fetched data
+        matchSummary = matchData.matches;
     } catch (error) {
         return res.status(500).json({ success: false, error: "Failed to fetch match data" });
     }
     const match = matchSummary.find((m) => m.MatchID == matchId);
-    console.log(match, "Match");
     const INN1_URL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/${matchId}-Innings1.js`;
     const INN2_URL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/${matchId}-Innings2.js`;
 
@@ -100,7 +114,7 @@ app.get("/api/iplscore/:matchId", async (req, res) => {
             const inn2Parsed = JSON.parse(inn2String);
             res.json({ success: true, matchDetails: match, scores1: inn1Parsed, scores2: inn2Parsed });
         } else {
-            res.status(200).json({ success: true, message: "Match Innings not Started" });
+            res.status(200).json({ success: true, matchDetails: match, message: "Match Innings not Started" });
         }
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
@@ -122,13 +136,12 @@ app.get("/api/iplmatches", async (req, res) => {
 app.post("/api/register", async (req, res) => {
     const { email, password, role } = req.body;
     try {
-        const userExists = await User.find({ email:email, role:role });
+        const userExists = await User.find({ email: email, role: role });
         if (userExists.length > 0) {
             return res.status(409).json({ success: false, message: "User with this email and role already exists" });
-        }
-        else {
+        } else {
             const user = await User.create({ email, password, role });
-            res.status(201).json({ success: true, message: "User registered successfully"});    
+            res.status(201).json({ success: true, message: "User registered successfully" });
         }
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
@@ -140,8 +153,7 @@ app.post("/api/login", async (req, res) => {
 
     try {
         const user = await User.findOne({ email });
-        const isMatch = password === user.password;
-        if (!user || !isMatch) {
+        if (!user || !(await bcrypt.compare(password, user.password))) {
             return res.status(400).json({ success: false, message: "Invalid email or password" });
         }
 
@@ -153,22 +165,48 @@ app.post("/api/login", async (req, res) => {
 
 app.post("/api/create-order", async (req, res) => {
     const { amount } = req.body;
-  
-    try {
-      const options = {
-        amount: amount * 100, // convert to paise
-        currency: "INR",
-        receipt: `receipt_${Date.now()}`
-      };
-  
-      const order = await razorpay.orders.create(options);
-      res.status(200).json(order);
-    } catch (err) {
-      res.status(500).json({ error: "Payment order creation failed" });
-    }
-  });
-  
 
+    try {
+        const options = {
+            amount: amount * 100,
+            currency: "INR",
+            receipt: `receipt_${Date.now()}`
+        };
+
+        const order = await razorpay.orders.create(options);
+        res.status(200).json(order);
+    } catch (err) {
+        res.status(500).json({ error: "Payment order creation failed" });
+    }
+});
+
+app.post("/api/iplbidding", async (req, res) => {
+    const { email, matchName, bets, amount } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found. Please register first." });
+        }
+        const existingBid = await Bidding.findOne({ email, matchName });
+        if (existingBid) {
+            return res.status(409).json({ success: false, message: "You have already placed a bet on this match" });
+        }
+        const newBid = new Bidding({ email, matchName, bets, amount });
+        await newBid.save();
+        res.status(201).json({ success: true, message: "Bid placed successfully", bid: newBid });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+app.get("/api/iplbidding", async (req, res) => {
+    try {
+        const bids = await Bidding.find();
+        res.status(200).json({ success: true, bids });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
 
 const url = "mongodb+srv://ppaproject:Teamwork12@sample-sxout.mongodb.net/IPLUsersDB?retryWrites=true&w=majority";
 
