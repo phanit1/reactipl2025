@@ -8,8 +8,8 @@ const IplBetting = ({ presentMatches }) => {
   const [selectedBetTypes, setSelectedBetTypes] = useState([]);
   const [tossBet, setTossBet] = useState("");
   const [winnerBet, setWinnerBet] = useState("");
-  const [maxScore, setMaxScore] = useState("");
-  const [minScore, setMinScore] = useState("");
+  // const [maxScore, setMaxScore] = useState("");
+  // const [minScore, setMinScore] = useState("");
   const [betAmount, setBetAmount] = useState("");
   const email = localStorage.getItem("email");
 
