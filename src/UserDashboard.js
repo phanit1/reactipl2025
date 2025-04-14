@@ -132,7 +132,7 @@ function UserDashboard() {
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
-                <Nav className=''>
+                <Nav className='ms-auto'>
                     <Nav.Link onClick={() => navigate("/")}>Logout</Nav.Link>
                 </Nav>
             </Navbar>

@@ -10,7 +10,7 @@ const IplHomePage = () => {
             <img 
                 src='https://triprdx.com/wp-content/uploads/2025/03/IPL-2025-cover-final.jpg' 
                 alt='IPL 2025' 
-                style={{ width: '100%', maxWidth: '600px', height: 'auto', borderRadius: '8px' }} 
+                style={{ width: '100%', maxWidth: '600px', height: 'auto', opacity: '1.0' }} 
             />
         </div>
     );

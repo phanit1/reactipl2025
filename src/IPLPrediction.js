@@ -6,7 +6,7 @@ import API_KEY from "./config";
 export default function IPLPrediction({ matches }) {
     const [predictions, setPredictions] = useState([]);
     const [loading, setLoading] = useState(false);
-    let APIKey = API_KEY.API_KEY; // Replace with your actual API key
+    let APIKey = API_KEY.API_KEY;
     const BASE_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent";
 
     useEffect(() => {
@@ -20,7 +20,7 @@ export default function IPLPrediction({ matches }) {
                 const matchNames = matches.map((match) => match.split(",")[0]);
                 const content = `You are an AI cricket analyst predicting IPL 2025 match outcomes. Here are the upcoming matches: ${matches}.
                 For each match, provide a List of JSON objects as response in the following format: 
-                [{"team1": "Chennai Super Kings", "team2": "Mumbai Indians", "winner": "Mumbai Indians", "probability": "65%"} , {"team1": "Kolkata Knight Riders", "team2": "Royal Challengers Bengaluru", "winner": "Royal Challengers Bengaluru", "probability": "53%"} ]`;
+                [{"team1": "Chennai Super Kings", "team2": "Mumbai Indians", "winner": "Mumbai Indians", "probability": "65%"}]`;
 
                 const response = await axios.post(
                     BASE_URL,
@@ -34,7 +34,7 @@ export default function IPLPrediction({ matches }) {
                 );
 
                 const rawOutput = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
-                const result = JSON.parse(JSON.stringify(rawOutput)); // Convert to JSON
+                const result = JSON.parse(JSON.stringify(rawOutput));
                 const res = result.split("```json")[1].split("```")[0];
                 let res1 = JSON.parse(res);
                 res1.forEach((r, index) => {
@@ -44,7 +44,6 @@ export default function IPLPrediction({ matches }) {
                     }
                 });
                 setPredictions(res1);
-
             } catch (error) {
                 console.error("Error fetching predictions:", error);
                 setPredictions([{ error: "Failed to get prediction. Try again." }]);
@@ -54,17 +53,17 @@ export default function IPLPrediction({ matches }) {
         };
 
         getPredictions();
-    }, [matches]); // Fetch predictions when matches update
+    }, [matches]);
 
     return (
         <div className="prediction-container">
-            <h1 className="prediction-title">IPL 2025 Predictions</h1>
+            {loading && <p className="loading-text">Loading predictions...</p>}
+            {!loading && predictions.length === 0 && <p className="no-data-text">No predictions available.</p>}
 
-            {loading && <p className="text-yellow-500">Loading predictions...</p>}
-            {predictions.length === 0 && !loading && <p className="text-red-500">No predictions available.</p>}
-            {predictions.length > 0 && (
-                <table className="prediction-table">
-                    <thead>
+            {/* Desktop Table View */}
+            <div className="table-view">
+                <table className="table table-bordered">
+                    <thead className="table-dark">
                         <tr>
                             <th>SNO</th>
                             <th>Match</th>
@@ -87,7 +86,21 @@ export default function IPLPrediction({ matches }) {
                         ))}
                     </tbody>
                 </table>
-            )}
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="card-view">
+                {predictions.map((pred, index) => (
+                    <div className="prediction-card" key={index}>
+                        <div><strong>SNO:</strong> {index + 1}</div>
+                        <div><strong>Match:</strong> {pred.team1} vs {pred.team2}</div>
+                        <div><strong>Venue:</strong> {pred.Venue}</div>
+                        <div><strong>Predicted Winner:</strong> {pred.winner}</div>
+                        <div><strong>Winning Probability:</strong> {pred.probability}</div>
+                        <div><strong>Actual Winner:</strong> {pred.Result}</div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
