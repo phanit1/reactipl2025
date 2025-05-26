@@ -34,6 +34,13 @@ const IplPointsTable = ({ points }) => {
                     style={{ width: "30px", height: "30px", marginRight: "10px" }}  // Adjust size as needed
                   />
                   <span>{team.TeamName}</span>
+                  {team.IsQualified !== undefined &&
+                  team.IsQualified !== null &&
+                  team.IsQualified !== '' &&
+                  team.IsQualified !== '0' && (
+                    <span className="standings_qualified"></span>
+                  )}
+
                 </td>
                 <td>{team.Matches}</td>
                 <td>{team.Wins}</td>
