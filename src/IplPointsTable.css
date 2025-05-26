@@ -14,6 +14,11 @@
   border-radius: 10px;
   overflow: hidden;
 }
+.standings_qualified {
+    background-image: url('https://scores.iplt20.com/ipl/mc/images/qualified.png');
+    background-size: contain;
+    margin-left: auto;
+  }
 
 .points-table thead {
   background: #003366; /* Dark blue IPL theme */
