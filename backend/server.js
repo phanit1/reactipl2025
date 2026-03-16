@@ -59,7 +59,7 @@ const SEASONS = {
         key: "2026",
         label: "IPL 2026",
         cricbuzzSeriesId: "9241",
-        statsId: "204"
+        statsId: "284"
     }
 };
 
@@ -91,11 +91,14 @@ async function fetchMatchSummaryForSeason(seasonKey) {
     if (matchSummaryBySeason.has(seasonKey)) {
         return matchSummaryBySeason.get(seasonKey);
     }
-
+    console.log(`Fetching match summary for season ${seasonKey}`);
     const { infoUrl } = buildSeasonUrls(seasonConfig);
+    console.log(`Fetching match summary from URL: ${infoUrl}`);
     const iplinforesponse = await axios.get(infoUrl);
+    console.log(`Received response for season ${seasonKey}`);
     const jsonString = iplinforesponse.data.match(/MatchSchedule\((.*)\)/)[1];
     const parsed = JSON.parse(jsonString);
+    console.log(`Fetched match summary for season ${seasonKey}:`, parsed.Matchsummary ? `Found ${parsed.Matchsummary.length} matches` : "No matches found");
     const matchSummary = parsed.Matchsummary.sort((a, b) => new Date(a.MatchDateNew) - new Date(b.MatchDateNew));
     matchSummaryBySeason.set(seasonKey, matchSummary);
     return matchSummary;
@@ -202,7 +205,9 @@ app.get("/api/iplscore/:matchId", async (req, res) => {
 app.get("/api/iplmatches", async (req, res) => {
     try {
         const seasonKey = getSeasonKey(req);
+        console.log("Requested season key:", seasonKey);
         const matchSummary = await fetchMatchSummaryForSeason(seasonKey);
+        console.log("Fetched match summary for season:", seasonKey, matchSummary ? `Found ${matchSummary.length} matches` : "No matches found");
         if (!matchSummary) {
             return res.status(400).json({ success: false, message: "Invalid season", availableSeasons: Object.keys(SEASONS) });
         }
