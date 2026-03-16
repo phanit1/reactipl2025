@@ -1,0 +1,142 @@
+.betting-container {
+    max-width: 1000px;
+    margin: 10px auto 20px;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+    border-radius: 16px;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.betting-container h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    color: #ff8c2b;
+    margin-bottom: 20px;
+}
+
+.betting-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.betting-form div {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    /* flex: 1 1 220px; */
+}
+
+@media (max-width: 480px) {
+    .betting-form div {
+        display: flex;
+        flex-direction: column;
+        min-width: 200px;
+    }
+}
+
+.betting-form label {
+    font-weight: 600;
+    color: rgba(245, 247, 251, 0.85);
+    margin-bottom: 6px;
+}
+
+.betting-form select,
+.betting-form input[type="number"] {
+    padding: 10px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.08);
+    color: #f5f7fb;
+    transition: border-color 0.3s ease;
+}
+
+.betting-form select:focus,
+.betting-form input:focus {
+    outline: none;
+    border-color: #ff8c2b;
+    box-shadow: 0 0 0 2px rgba(255, 140, 43, 0.35);
+}
+
+.betting-form button {
+    background-color: #ff8c2b;
+    color: #1b1b1b;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.betting-form button:hover {
+    background-color: #ffb86b;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+.checkbox-group input[type="checkbox"] {
+    accent-color: #ff8c2b;
+}
+
+/* Responsive for tablets and smaller */
+@media (max-width: 768px) {
+    .betting-form {
+        flex-direction: column;
+        align-items: stretch;
+        /* gap: 1rem; */
+    }
+
+    .betting-form div {
+        width: 100%;
+    }
+
+    .betting-form button {
+        width: 100%;
+        font-size: 1.1rem;
+    }
+
+    .betting-container h2 {
+        font-size: 1.6rem;
+    }
+}
+
+/* Extra responsive for smaller mobile devices */
+@media (max-width: 480px) {
+    .betting-container {
+        padding: 20px 15px;
+    }
+
+    .betting-form input,
+    .betting-form select {
+        font-size: 0.95rem;
+    }
+
+    .betting-form button {
+        font-size: 1rem;
+    }
+
+    .betting-form div {
+        display: flex;
+        flex-direction: column;
+        min-width: 200px;
+        flex: 1 1 100%;
+    }
+}

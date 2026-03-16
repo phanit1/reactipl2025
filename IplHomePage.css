@@ -1,0 +1,27 @@
+.home-hero {
+  text-align: center;
+  padding: 12px 8px 18px;
+  color: #f5f7fb;
+}
+
+.home-hero h2 {
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 2rem;
+  letter-spacing: 0.4px;
+  margin-bottom: 6px;
+}
+
+.home-hero p {
+  margin: 6px 0;
+  color: rgba(245, 247, 251, 0.85);
+}
+
+.home-hero .hero-image {
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  border-radius: 16px;
+  margin-top: 14px;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}

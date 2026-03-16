@@ -1,0 +1,401 @@
+.match-container {
+  padding: 6px;
+  font-family: Arial, sans-serif;
+  color: white;
+  max-height: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.match-info-container {
+  background: #001d52;
+  color: white;
+  padding: 14px;
+  border-radius: 10px;
+  font-family: 'Segoe UI', sans-serif;
+  margin-bottom: 12px;
+}
+
+.scorecard-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.team-score {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.teamlogo {
+  width: 90px;
+  height: 90px;
+}
+
+.score-details h1 {
+  font-size: 28px;
+  margin: 0;
+}
+
+.score-details p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.match-center {
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.match-id {
+  font-size: 16px;
+  background: #ffffff22;
+  padding: 3px 10px;
+  border-radius: 10px;
+  margin-bottom: 4px;
+  display: inline-block;
+}
+
+.over-summary {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.over-block h4 {
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.balls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.ball {
+  background: #fff;
+  color: #000;
+  border-radius: 50%;
+  padding: 10px 12px;
+  font-weight: bold;
+  font-size: 14px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 34px;
+  height: 34px;
+}
+
+.ball-six {
+  background-color: #8bc34a;
+}
+
+.result-banner {
+  background: #3455ff;
+  color: white;
+  padding: 12px;
+  text-align: center;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.innings-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.team-button,
+.back-button {
+  padding: 8px 14px;
+  background-color: #0057b7;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.scorecard {
+  margin-top: 10px;
+}
+
+.batting-table {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #ccc;
+}
+
+@media (max-width: 768px) {
+  .batting-table .table-header,
+  .batting-table .table-row {
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .batting-table .table-header,
+  .batting-table .table-row {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+  padding: 6px;
+  border-bottom: 1px solid #eee;
+}
+
+.table-header {
+  font-weight: bold;
+  background: #f6f6f6;
+  color: black;
+}
+
+.batter-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.player-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.player-name {
+  font-weight: bold;
+}
+
+.player-role {
+  font-size: 12px;
+  color: #888;
+}
+
+.out-desc {
+  font-size: 13px;
+  color: '#000';
+}
+
+.bowling-table {
+  display: flex;
+  flex-direction: column;
+  margin-top: 14px;
+  border-top: 1px solid #ccc;
+}
+
+.bowling-table .table-header,
+.bowling-table .table-row {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.bowling-table .table-header {
+  font-weight: bold;
+  background: #f8f8f8;
+  color: 'white'
+}
+
+.bowling-table .player-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.bowling-table .batter-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.no-innings-message {
+  text-align: center;
+  font-size: 2rem;
+  color: #fff;
+  margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .teamlogo {
+    width: 10vw;
+    height: 10vh;
+  }
+
+  .score-details h1 {
+    font-size: 5vw;
+  }
+
+  .ball {
+    padding: 2vw 2.5vw;
+    font-size: 2vw;
+    min-width: 5vw;
+    height: 5vw;
+  }
+
+  .team-button,
+  .back-button {
+    font-size: 2.5vw;
+    padding: 2vw 4vw;
+  }
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  }
+
+  .bowling-table .table-header,
+  .bowling-table .table-row {
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+  }
+
+  .score-details h1 {
+    font-size: 28px;
+  }
+
+  .over-summary {
+    gap: 20px;
+  }
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  }
+
+  .bowling-table .table-header,
+  .bowling-table .table-row {
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .teamlogo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .score-details h1 {
+    font-size: 24px;
+  }
+
+  .innings-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .team-button,
+  .back-button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+
+  .bowling-table .table-header,
+  .bowling-table .table-row {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+}
+
+.match-info-container {
+  padding: 1rem;
+  background: linear-gradient(to right, #001F54, #003366); /* matches your theme */
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 100%;
+  margin: auto;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem 2rem;
+}
+
+.info-label {
+  font-style: italic;
+  font-weight: bold;
+  text-align: right;
+  font-size: 16px;
+}
+
+.info-value {
+  font-size: 16px;
+}
+
+.highlight {
+  color: #00b4d8;
+  font-weight: 600;
+}
+
+.divider {
+  margin: 0 10px;
+  color: #ccc;
+}
+
+.subtext {
+  color: #ccc;
+  font-size: 14px;
+}
+.match-status-box {
+  background-color: #3b5bff;
+  padding: 12px 24px;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 6px;
+  width: fit-content;
+  margin: auto;
+  font-size: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.match-started {
+  background-color: #28a745;
+  padding: 12px 24px;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  width: fit-content;
+  margin: auto;
+}
+
+.countdown-container {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}

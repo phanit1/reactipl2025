@@ -1,0 +1,79 @@
+.prediction-container {
+    padding: 10px 6px 20px;
+    color: #f5f7fb;
+  }
+  
+  /* Table View - Only show on desktop */
+  .table-view {
+    display: block;
+  }
+  
+  /* Card View - Hide on desktop */
+  .card-view {
+    display: none;
+  }
+  
+  /* Card Styling */
+  .prediction-card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .prediction-card div {
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  
+  .prediction-card strong {
+    display: inline-block;
+    width: 150px;
+    font-weight: 600;
+  }
+  
+  .loading-text, .no-data-text {
+    color: #ff8c2b;
+    font-weight: 500;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+
+  .prediction-container .table {
+    color: #f5f7fb;
+    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .prediction-container .table thead {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .prediction-container .table-dark {
+    background: rgba(255, 255, 255, 0.12) !important;
+  }
+
+  .prediction-container .table-dark th {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .prediction-container .table tbody tr:hover {
+    background: rgba(255, 140, 43, 0.12);
+  }
+  
+  /* Responsive Switch */
+  @media (max-width: 768px) {
+    .table-view {
+      display: none;
+    }
+  
+    .card-view {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  

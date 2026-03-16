@@ -1,0 +1,222 @@
+/* Root Container */
+.ipl-schedule-container {
+    font-family: "Segoe UI", Arial, sans-serif;
+    padding: 8px;
+    background-color: transparent;
+    color: #f5f7fb;
+    border-radius: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Title */
+  .schedule-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #1976d2;
+    margin-bottom: 30px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .filters select,
+  .filters input {
+    padding: 10px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    font-size: 14px;
+    min-width: 150px;
+    flex: 1;
+    background: rgba(255, 255, 255, 0.08);
+    color: #f5f7fb;
+  }
+
+  .filters select option {
+    color: #1b120c;
+    background: #fff2e8;
+  }
+
+  .filters select:focus,
+  .filters input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 140, 43, 0.35);
+  }
+  
+  @media (max-width: 768px) {
+    .filters {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .filters select,
+    .filters input {
+      width: 100%;
+    }
+  }
+  
+  /* Cards Container */
+  .cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+  }
+  
+  /* Individual Match Card */
+  .match-card {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f5f7fb;
+    padding: 18px;
+    border-radius: 14px;
+    width: 300px;
+    text-align: center;
+    transition: all 0.25s ease;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  
+  .match-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.28);
+  }
+  
+  /* Team Logos & Names */
+  .team-names {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .team-names img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .team-names img:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Team Names and Info */
+  .match-card h6 {
+    font-size: 1.05rem;
+    margin: 10px 0 8px;
+    color: #f5f7fb;
+    font-weight: 600;
+  }
+  
+  .match-card p {
+    font-size: 1rem;
+    margin: 5px 0;
+    color: rgba(245, 247, 251, 0.85);
+  }
+  
+  .match-card p strong {
+    color: #ff8c2b;
+  }
+
+  .match-card button {
+    margin-top: 10px;
+    background: #ff8c2b;
+    color: #1b1b1b;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .match-card button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(255, 140, 43, 0.35);
+  }
+  
+  /* Scrollable container */
+  .scrollable-container {
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+
+  .clear-date-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #f5f7fb;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    margin: 6px auto 16px;
+    display: block;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .clear-date-btn:hover {
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
+  }
+  
+  .scrollable-container::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .scrollable-container::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 140, 43, 0.7);
+    border-radius: 10px;
+  }
+  
+  .scrollable-container::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+  
+  /* Team image row if separate */
+  .match-card .team-images {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .match-card .team-images img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  /* Responsive Design */
+  @media screen and (max-width: 768px) {
+    .filters {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  
+    .filters input,
+    .filters select {
+      min-width: 140px;
+      font-size: 0.95rem;
+    }
+  
+    .match-card {
+      width: 100%;
+      max-width: 95%;
+    }
+  
+    .schedule-title {
+      font-size: 2rem;
+    }
+  }
+  

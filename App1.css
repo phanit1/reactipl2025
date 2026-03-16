@@ -1,0 +1,131 @@
+:root {
+  --bg-1: #1c0f0a;
+  --bg-2: #3b1b12;
+  --bg-3: #1f1b1a;
+  --accent: #ff8c2b;
+  --accent-2: #ffb86b;
+  --text: #fff7ef;
+  --muted: #f1d4be;
+  --card: rgba(255, 255, 255, 0.09);
+  --card-border: rgba(255, 255, 255, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 700px at 10% -10%, rgba(255, 140, 43, 0.28), transparent 60%),
+    radial-gradient(900px 600px at 90% 10%, rgba(255, 184, 107, 0.22), transparent 55%),
+    linear-gradient(135deg, var(--bg-1), var(--bg-2) 55%, var(--bg-3));
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 40px;
+}
+
+.navbar {
+  background: rgba(5, 12, 20, 0.75);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.navbar.bg-primary {
+  background: rgba(5, 12, 20, 0.78) !important;
+}
+
+.navbar-brand span {
+  font-family: "Segoe UI", Arial, sans-serif;
+  letter-spacing: 0.5px;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+.nav-link {
+  color: var(--text) !important;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--text) !important;
+  transform: translateY(-1px);
+}
+
+.season-select {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--card-border);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.season-select option {
+  color: #1b120c;
+  background: #fff2e8;
+}
+
+.content-shell select option {
+  color: #1b120c;
+  background: #fff2e8;
+}
+
+.season-select:focus {
+  box-shadow: 0 0 0 2px rgba(255, 140, 43, 0.35);
+}
+
+.content-shell {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
+  animation: riseIn 420ms ease;
+  color: var(--text);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+
+.matchinfo-shell {
+  height: calc(100vh - 110px);
+  overflow: hidden;
+  padding: 8px;
+  margin-top: 0 !important;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-brand span {
+    font-size: 1.1rem;
+  }
+
+  .content-shell {
+    padding: 14px;
+  }
+}
