@@ -48,14 +48,76 @@ const razorpay = new Razorpay({
 app.use(cors());
 app.use(express.json());
 
-const CRICBUZZ_URL = "https://www.cricbuzz.com/cricket-series/9237/indian-premier-league-2025/matches";
-const IPL_INFO_URL = "https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/203-matchschedule.js";
-const IPL_POINTS_TABLE_URL = "https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/stats/203-groupstandings.js";
-let matchSummary = [];
+const SEASONS = {
+    "2025": {
+        key: "2025",
+        label: "IPL 2025",
+        cricbuzzSeriesId: "9237",
+        statsId: "203"
+    },
+    "2026": {
+        key: "2026",
+        label: "IPL 2026",
+        cricbuzzSeriesId: "9241",
+        statsId: "204"
+    }
+};
+
+const DEFAULT_SEASON = "2026";
+const matchSummaryBySeason = new Map();
+
+function getSeasonKey(req) {
+    const season = (req.query.season || req.query.year || DEFAULT_SEASON).toString();
+    return season;
+}
+
+function getSeasonConfig(seasonKey) {
+    return SEASONS[seasonKey] || null;
+}
+
+function buildSeasonUrls(seasonConfig) {
+    const infoUrl = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/${seasonConfig.statsId}-matchschedule.js`;
+    const pointsUrl = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/stats/${seasonConfig.statsId}-groupstandings.js`;
+    const cricbuzzUrl = `https://www.cricbuzz.com/cricket-series/${seasonConfig.cricbuzzSeriesId}/indian-premier-league-${seasonConfig.key}/matches`;
+    return { infoUrl, pointsUrl, cricbuzzUrl };
+}
+
+async function fetchMatchSummaryForSeason(seasonKey) {
+    const seasonConfig = getSeasonConfig(seasonKey);
+    if (!seasonConfig) {
+        return null;
+    }
+
+    if (matchSummaryBySeason.has(seasonKey)) {
+        return matchSummaryBySeason.get(seasonKey);
+    }
+
+    const { infoUrl } = buildSeasonUrls(seasonConfig);
+    const iplinforesponse = await axios.get(infoUrl);
+    const jsonString = iplinforesponse.data.match(/MatchSchedule\((.*)\)/)[1];
+    const parsed = JSON.parse(jsonString);
+    const matchSummary = parsed.Matchsummary.sort((a, b) => new Date(a.MatchDateNew) - new Date(b.MatchDateNew));
+    matchSummaryBySeason.set(seasonKey, matchSummary);
+    return matchSummary;
+}
+
+app.get("/api/seasons", (req, res) => {
+    const seasons = Object.values(SEASONS).map((season) => ({
+        key: season.key,
+        label: season.label
+    }));
+    res.json({ success: true, seasons, defaultSeason: DEFAULT_SEASON });
+});
 
 app.get("/api/iplpointstable", async (req, res) => {
     try {
-        const iplinforesponse = await axios.get(IPL_POINTS_TABLE_URL);
+        const seasonKey = getSeasonKey(req);
+        const seasonConfig = getSeasonConfig(seasonKey);
+        if (!seasonConfig) {
+            return res.status(400).json({ success: false, message: "Invalid season", availableSeasons: Object.keys(SEASONS) });
+        }
+        const { pointsUrl } = buildSeasonUrls(seasonConfig);
+        const iplinforesponse = await axios.get(pointsUrl);
         const jsonString = iplinforesponse.data.match(/ongroupstandings\((.*)\)/)[1];
         const parsed = JSON.parse(jsonString);
         const pointsTableData = parsed.points;
@@ -67,14 +129,25 @@ app.get("/api/iplpointstable", async (req, res) => {
 
 app.get("/api/iplscore/:matchId", async (req, res) => {
     const matchId = req.params.matchId;
+    const seasonKey = getSeasonKey(req);
+    const seasonConfig = getSeasonConfig(seasonKey);
+    if (!seasonConfig) {
+        return res.status(400).json({ success: false, message: "Invalid season", availableSeasons: Object.keys(SEASONS) });
+    }
     try {
-        const response = await axios.get("https://reactipl2025backend.vercel.app/api/iplmatches");
-        const matchData = response.data;
-        matchSummary = matchData.matches;
+        const matchData = await fetchMatchSummaryForSeason(seasonKey);
+        if (!matchData) {
+            return res.status(400).json({ success: false, message: "Invalid season", availableSeasons: Object.keys(SEASONS) });
+        }
+        matchSummaryBySeason.set(seasonKey, matchData);
     } catch (error) {
         return res.status(500).json({ success: false, error: "Failed to fetch match data" });
     }
+    const matchSummary = matchSummaryBySeason.get(seasonKey) || [];
     const match = matchSummary.find((m) => m.MatchID == matchId);
+    if (!match) {
+        return res.status(404).json({ success: false, message: "Match not found for selected season" });
+    }
     const INN1_URL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/${matchId}-Innings1.js`;
     const INN2_URL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/${matchId}-Innings2.js`;
     const HEADTOHEADURL = `https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/stats/match/${matchId}-headTohead.js`;
@@ -128,10 +201,11 @@ app.get("/api/iplscore/:matchId", async (req, res) => {
 
 app.get("/api/iplmatches", async (req, res) => {
     try {
-        const iplinforesponse = await axios.get(IPL_INFO_URL);
-        const jsonString = iplinforesponse.data.match(/MatchSchedule\((.*)\)/)[1];
-        const parsed = JSON.parse(jsonString);
-        matchSummary = parsed.Matchsummary.sort((a, b) => new Date(a.MatchDateNew) - new Date(b.MatchDateNew));
+        const seasonKey = getSeasonKey(req);
+        const matchSummary = await fetchMatchSummaryForSeason(seasonKey);
+        if (!matchSummary) {
+            return res.status(400).json({ success: false, message: "Invalid season", availableSeasons: Object.keys(SEASONS) });
+        }
         res.json({ success: true, matches: matchSummary });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
