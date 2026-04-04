@@ -1,18 +1,19 @@
 .betting-container {
     max-width: 1000px;
-    margin: 40px auto;
-    padding: 30px 20px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    font-family: 'Segoe UI', sans-serif;
+    margin: 0 auto;
+    padding: 1.5rem;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(15, 23, 42, 0.66));
+    box-shadow: var(--shadow-lg);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-soft);
 }
 
 .betting-container h2 {
-    text-align: center;
-    font-size: 2.2rem;
-    color: #1976d2;
-    margin-bottom: 25px;
+    text-align: left;
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin-bottom: 1.25rem;
+    font-family: "Space Grotesk", sans-serif;
 }
 
 .betting-form {
@@ -40,28 +41,30 @@
 
 .betting-form label {
     font-weight: 600;
-    color: #333;
+    color: var(--text-secondary);
     margin-bottom: 6px;
 }
 
 .betting-form select,
 .betting-form input[type="number"] {
     padding: 10px 14px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    border-radius: 14px;
     font-size: 1rem;
     transition: border-color 0.3s ease;
+    background: rgba(15, 23, 42, 0.92);
+    color: var(--text-primary);
 }
 
 .betting-form select:focus,
 .betting-form input:focus {
     outline: none;
-    border-color: #1976d2;
+    border-color: var(--accent-cyan);
 }
 
 .betting-form button {
-    background-color: #1976d2;
-    color: white;
+    background: linear-gradient(135deg, var(--accent-teal), var(--accent-cyan));
+    color: #04111f;
     border: none;
     padding: 12px 20px;
     font-size: 1rem;
@@ -72,7 +75,7 @@
 }
 
 .betting-form button:hover {
-    background-color: #0d47a1;
+    filter: brightness(1.04);
 }
 
 /* Responsive for tablets and smaller */

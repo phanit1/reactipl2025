@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "./IplSchedule.css";
+import { useNavigate } from "react-router-dom";
 
-const IplSchedule = ({ schedule }) => {
+const IplSchedule = ({ schedule, selectedSeason }) => {
+    const navigate = useNavigate();
     const [filterTeam, setFilterTeam] = useState("");
     const [filterVenue, setFilterVenue] = useState("");
     const [matchTimingFilter, setMatchTimingFilter] = useState("all");
@@ -42,6 +44,13 @@ const IplSchedule = ({ schedule }) => {
 
     return (
         <div className="ipl-schedule-container scrollable-container">
+            <div className="schedule-header">
+                <div>
+                    <span className="section-badge">Fixture Studio</span>
+                    <h2>Explore the full match calendar</h2>
+                </div>
+                <p>Filter by timing, team, venue, or date to jump straight to the games you care about.</p>
+            </div>
             <div className="filters">
                 <select value={matchTimingFilter} onChange={(e) => setMatchTimingFilter(e.target.value)}>
                     <option value="all">All Matches</option>
@@ -72,7 +81,7 @@ const IplSchedule = ({ schedule }) => {
                 />
             </div>
             {filterDate && (
-                <button onClick={() => setFilterDate("")}>Clear Date</button>
+                <button className="clear-date-button" onClick={() => setFilterDate("")}>Clear Date</button>
             )}
 
             <div className="cards-container">
@@ -83,13 +92,16 @@ const IplSchedule = ({ schedule }) => {
                                 <img src={match.HomeTeamLogo} width={100} height={100} alt={match.HomeTeamName} />
                                 <img src={match.AwayTeamLogo} width={100} height={100} alt={match.AwayTeamName} />
                             </div>
+                            <span className={`match-status-pill ${match.MatchStatus === "Post" ? "is-complete" : match.MatchStatus === "UpComing" ? "is-upcoming" : "is-live"}`}>
+                                {match.MatchStatus === "Post" ? "Completed" : match.MatchStatus}
+                            </span>
                             <h6>{match.MatchName}</h6>
                             <p><strong>Date:</strong> {match.MatchDateNew}</p>
                             <p><strong>Venue:</strong> {match.GroundName}</p>
                             <p><strong>Time:</strong> {match.MatchTime}</p>
                             <p><strong>Result:</strong> {match.MatchStatus === "Post" ? match.Comments : match.MatchStatus}</p>
                             <button
-                                onClick={() => window.location.href = `/user/match-info/${match.MatchID}`}
+                                onClick={() => navigate(`/user/match-info/${match.MatchID}?season=${selectedSeason}`)}
                             >
                                 View Match Info
                             </button>

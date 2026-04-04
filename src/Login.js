@@ -49,7 +49,7 @@
 // src/pages/Login.jsx
 import React, { useState } from "react";
 import "./Login.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
     const [formData, setFormData] = useState({ email: "", password: "" });
@@ -97,15 +97,53 @@ function Login() {
     };
 
     return (
-        <div className="login-container">
-            <form className="login-form" onSubmit={handleLogin}>
-                <h2>Login</h2>
-                <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-                <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-                <button type="submit">Login</button>
-                <p>Don't have an account? <a href="/register">Register</a></p>
-            </form>
-        </div>
+        <section className="auth-page page-shell">
+            <div className="auth-layout">
+                <div className="auth-copy">
+                    <span className="section-badge">IPL Intelligence Hub</span>
+                    <h1 className="section-title">Track fixtures, read form, and make every match feel electric.</h1>
+                    <p className="section-copy">
+                        A sharper IPL experience with live match context, predictions, betting flows, and a cleaner
+                        modern dashboard for every fan.
+                    </p>
+                    <div className="auth-stats">
+                        <div className="stat-chip">
+                            <strong>74</strong>
+                            <span>Matches to follow</span>
+                        </div>
+                        <div className="stat-chip">
+                            <strong>10</strong>
+                            <span>Teams in the title race</span>
+                        </div>
+                        <div className="stat-chip">
+                            <strong>Live</strong>
+                            <span>Scores and predictions</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="login-container glass-panel">
+                    <form className="login-form" onSubmit={handleLogin}>
+                        <div className="form-heading">
+                            <p className="form-kicker">Welcome back</p>
+                            <h2>Sign in to your IPL space</h2>
+                        </div>
+                        <label>
+                            <span>Email</span>
+                            <input type="email" name="email" placeholder="you@example.com" onChange={handleChange} required />
+                        </label>
+                        <label>
+                            <span>Password</span>
+                            <input type="password" name="password" placeholder="Enter your password" onChange={handleChange} required />
+                        </label>
+                        <button type="submit">Enter Dashboard</button>
+                        <p className="auth-link-text">
+                            New here? <Link to="/register">Create an account</Link>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </section>
     );
 }
 

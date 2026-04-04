@@ -32,33 +32,46 @@ const Register = () => {
   };
 
   return (
-    <div className="register-container">
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit} className="form">
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
-        {/* Hidden Role field */}
-        <input type="hidden" name="role" value="user" />
-        <button type="submit">Register</button>
-      </form>
-      <p className="redirect">
-        Already have an account? <Link to="/login">Login</Link>
-      </p>
-    </div>
+    <section className="register-page page-shell">
+      <div className="register-container glass-panel">
+        <div className="register-copy">
+          <span className="section-badge">New Season Setup</span>
+          <h2 className="section-title">Create your account and step into a brighter IPL control room.</h2>
+          <p className="section-copy">
+            Save picks, follow fixtures, and move through the tournament with a cleaner, more premium fan experience.
+          </p>
+        </div>
+        <form onSubmit={handleSubmit} className="form register-form">
+          <label>
+            <span>Email</span>
+            <input
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <label>
+            <span>Password</span>
+            <input
+              type="password"
+              name="password"
+              placeholder="Choose a secure password"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+          </label>
+          <input type="hidden" name="role" value="user" />
+          <button type="submit">Create Account</button>
+        </form>
+        <p className="redirect">
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
+      </div>
+    </section>
   );
 };
 

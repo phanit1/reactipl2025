@@ -3,11 +3,12 @@ import axios from "axios";
 import "./IPLPrediction.css";
 import API_KEY from "./config";
 
-export default function IPLPrediction({ matches }) {
+const BASE_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent";
+const apiKey = API_KEY.API_KEY;
+
+export default function IPLPrediction({ matches, selectedSeason }) {
     const [predictions, setPredictions] = useState([]);
     const [loading, setLoading] = useState(false);
-    let APIKey = API_KEY.API_KEY;
-    const BASE_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent";
 
     useEffect(() => {
         const getPredictions = async () => {
@@ -18,7 +19,7 @@ export default function IPLPrediction({ matches }) {
                 const matchWinners = matches.map((match) => match.split(",")[1]);
                 const matchesVenue = matches.map((match) => match.split(",")[2]);
                 const matchNames = matches.map((match) => match.split(",")[0]);
-                const content = `You are an AI cricket analyst predicting IPL 2025 match outcomes. Here are the upcoming matches: ${matches}.
+                const content = `You are an AI cricket analyst predicting IPL ${selectedSeason} match outcomes. Here are the upcoming matches: ${matches}.
                 For each match, provide a List of JSON objects as response in the following format: 
                 [{"team1": "Chennai Super Kings", "team2": "Mumbai Indians", "winner": "Mumbai Indians", "probability": "65%"}]`;
 
@@ -28,7 +29,7 @@ export default function IPLPrediction({ matches }) {
                         contents: [{ role: "user", parts: [{ text: content }] }]
                     },
                     {
-                        params: { key: APIKey },
+                        params: { key: apiKey },
                         headers: { "Content-Type": "application/json" }
                     }
                 );
@@ -53,7 +54,7 @@ export default function IPLPrediction({ matches }) {
         };
 
         getPredictions();
-    }, [matches]);
+    }, [matches, selectedSeason]);
 
     return (
         <div className="prediction-container">

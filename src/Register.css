@@ -1,49 +1,65 @@
+.register-page {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
 .register-container {
-    max-width: 400px;
-    margin: 80px auto;
-    padding: 2rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    background: #f9f9f9;
-  }
+  display: grid;
+  gap: 1.5rem;
+  width: min(680px, 100%);
+  margin: 0 auto;
+  padding: 2rem;
+}
 
-  h2 {
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
+.register-copy {
+  display: grid;
+  gap: 1rem;
+}
 
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
+.register-form {
+  display: grid;
+  gap: 1rem;
+}
 
-  input {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
-  }
+.register-form label {
+  display: grid;
+  gap: 0.45rem;
+  color: var(--text-secondary);
+}
 
-  button {
-    padding: 12px;
-    background-color: #1e3a8a;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-  }
+.register-form input {
+  padding: 0.95rem 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 14px;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+  outline: none;
+}
 
-  button:hover {
-    background-color: #3b4cca;
-  }
+.register-form input::placeholder {
+  color: var(--text-muted);
+}
 
-  .redirect {
-    text-align: center;
-    margin-top: 1rem;
-  }
+.register-form button {
+  padding: 0.95rem 1rem;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-teal));
+  color: #04111f;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 800;
+}
 
-  a {
-    color: #1e3a8a;
-  }
+.redirect {
+  text-align: center;
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.redirect a {
+  color: var(--accent-gold);
+  text-decoration: none;
+}

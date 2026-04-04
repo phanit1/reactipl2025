@@ -1,17 +1,18 @@
 .container {
   width: 100%;
-  overflow-x: auto; /* Enables horizontal scrolling on smaller screens */
-  /* padding: 20px; */
-  border-radius: 10px;
-  /* margin: -10px auto; */
+  overflow-x: auto;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-soft);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(15, 23, 42, 0.66));
+  box-shadow: var(--shadow-lg);
+  padding: 0.75rem;
 }
 
 .points-table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  background: transparent;
+  color: var(--text-primary);
   overflow: hidden;
 }
 .standings_qualified {
@@ -21,32 +22,32 @@
   }
 
 .points-table thead {
-  background: #003366; /* Dark blue IPL theme */
-  color: white;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
 }
 
 .points-table th,
 .points-table td {
-  /* padding: 12px; */
   text-align: center;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.95rem 0.75rem;
 }
 
 .points-table tbody tr:nth-child(even) {
-  background: #f9f9f9;
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .points-table tbody tr:hover {
-  background: rgba(0, 51, 102, 0.2);
+  background: rgba(56, 189, 248, 0.08);
   cursor: pointer;
 }
 
 .team-cell {
   display: flex;
   align-items: center;
-  /* justify-content: center; */
-  /* gap: 8px; */
   font-weight: bold;
+  gap: 0.5rem;
+  color: var(--text-primary);
 }
 
 .team-logo {
@@ -54,6 +55,15 @@
   height: 30px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.points {
+  color: var(--accent-gold);
+  font-weight: 800;
+}
+
+.performance {
+  color: var(--text-primary);
 }
 
 /* Responsive Design */

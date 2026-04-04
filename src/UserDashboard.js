@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
 import IplSchedule from "./IPLSchedule";
 import IplPointsTable from './IPLPointsTable';
 import IplBetting from './IplBetting';
@@ -10,21 +7,68 @@ import IplHomePage from './IplHomePage';
 import { useNavigate } from "react-router-dom";
 import './UserDashboard.css';
 
+const API_BASE_URL = "https://reactipl2025backend.vercel.app/api";
+const FALLBACK_SEASONS = [
+    { key: "2026", label: "IPL 2026" },
+    { key: "2025", label: "IPL 2025" }
+];
+const DEFAULT_SEASON = "2026";
 
 function UserDashboard() {
-    const [content, setContent] = useState(''); // Default to IPL 2025 images
+    const [content, setContent] = useState('home');
+    const [seasonOptions, setSeasonOptions] = useState(FALLBACK_SEASONS);
+    const [selectedSeason, setSelectedSeason] = useState(
+        localStorage.getItem("selectedSeason") || DEFAULT_SEASON
+    );
     const [schedule, setSchedule] = useState(null);
     const [pointsTable, setPointsTable] = useState(null);
     const [matches, setMatches] = useState([]);
     const [presentMatches, setPresentMatches] = useState([]);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        let isMounted = true;
+
+        async function fetchSeasons() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/seasons`);
+                const data = await response.json();
+
+                if (response.ok && isMounted) {
+                    const seasons = data.seasons?.length ? data.seasons : FALLBACK_SEASONS;
+                    const defaultSeason = data.defaultSeason || DEFAULT_SEASON;
+                    const storedSeason = localStorage.getItem("selectedSeason");
+                    const nextSeason = seasons.some((season) => season.key === storedSeason)
+                        ? storedSeason
+                        : defaultSeason;
+
+                    setSeasonOptions(seasons);
+                    setSelectedSeason(nextSeason);
+                    localStorage.setItem("selectedSeason", nextSeason);
+                }
+            } catch (err) {
+                if (isMounted) {
+                    setSeasonOptions(FALLBACK_SEASONS);
+                }
+            }
+        }
+
+        fetchSeasons();
+
+        return () => {
+            isMounted = false;
+        };
+    }, []);
 
     useEffect(() => {
-        async function fetchIPL2025Matches() {
+        localStorage.setItem("selectedSeason", selectedSeason);
+    }, [selectedSeason]);
+
+    useEffect(() => {
+        async function fetchSeasonMatches() {
           try {
             const response = await fetch(
-              'https://reactipl2025backend.vercel.app/api/iplmatches'
+              `${API_BASE_URL}/iplmatches?season=${selectedSeason}`
             );
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
@@ -32,19 +76,18 @@ function UserDashboard() {
             const data = await response.json();
             setSchedule(data.matches);
           } catch (err) {
-            // setError(err);
-            // setLoading(false);
+            setSchedule([]);
           }
         }
     
-        fetchIPL2025Matches();
-      }, []);
+        fetchSeasonMatches();
+      }, [selectedSeason]);
     
       useEffect(() => {
         async function fetchPointsTable() {
           try {
             const response = await fetch(
-              'https://reactipl2025backend.vercel.app/api/iplpointstable'
+              `${API_BASE_URL}/iplpointstable?season=${selectedSeason}`
             );
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
@@ -52,12 +95,11 @@ function UserDashboard() {
             const data = await response.json();
             setPointsTable(data.pointsTable);
           } catch (err) {
-            // setError(err);
-            // setLoading(false);
+            setPointsTable([]);
           }
         }
         fetchPointsTable();
-      }, []);
+      }, [selectedSeason]);
     
       useEffect(() => {
         if (schedule) {
@@ -97,49 +139,79 @@ function UserDashboard() {
     const renderContent = () => {
         switch (content) {
             case 'home':
-                return <IplHomePage />;
+                return <IplHomePage selectedSeason={selectedSeason} />;
             case 'schedule':
-                return <IplSchedule schedule={schedule} />;
+                return <IplSchedule schedule={schedule} selectedSeason={selectedSeason} />;
             case 'points':
                 return <IplPointsTable points={pointsTable} />;
             case 'predictions':
-                return <IPLPrediction matches={matches} />;
+                return <IPLPrediction matches={matches} selectedSeason={selectedSeason} />;
             case 'betting': 
                 return <IplBetting presentMatches={presentMatches} />;
             default:
-                return <IplHomePage />;
+                return <IplHomePage selectedSeason={selectedSeason} />;
         }
     };
 
     return (
-        <>
-            <Navbar collapseOnSelect expand="lg" bg="primary" data-bs-theme="dark">
-                <Container>
-                    <Navbar.Brand onClick={() => setContent('home')}>
-                    {/* <img 
-              src="https://bizacuity.com/wp-content/uploads/2022/12/BizAcuity-Logo-1.png" 
-              style={{ width: '150px', height: '30px' }} 
-              /> */}
-              <span style={{padding:'5px', fontSize:'1rem'}}>IPL 2025</span>
-                      </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                    <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="me-auto">
-                            <Nav.Link onClick={() => setContent('schedule')}>Schedule</Nav.Link>
-                            <Nav.Link onClick={() => setContent('points')}>Points Table</Nav.Link>
-                            <Nav.Link onClick={() => setContent('predictions')}>Predictions</Nav.Link>
-                            <Nav.Link onClick={() => setContent('betting')}>Betting</Nav.Link>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-                <Nav className='ms-auto'>
-                    <Nav.Link onClick={() => navigate("/")}>Logout</Nav.Link>
-                </Nav>
-            </Navbar>
-            <Container className="mt-4">
+        <div className="dashboard-page page-shell">
+            <header className="dashboard-nav glass-panel">
+                <button type="button" className="dashboard-brand dashboard-brand--button" onClick={() => setContent('home')}>
+                    <span className="dashboard-brand__mark">IPL</span>
+                    <span>
+                        <strong>2025 Pulse</strong>
+                        <small>Modern match intelligence</small>
+                    </span>
+                </button>
+                <nav className="dashboard-menu" aria-label="Dashboard sections">
+                    <button type="button" className={content === 'schedule' ? 'active' : ''} onClick={() => setContent('schedule')}>Schedule</button>
+                    <button type="button" className={content === 'points' ? 'active' : ''} onClick={() => setContent('points')}>Points Table</button>
+                    <button type="button" className={content === 'predictions' ? 'active' : ''} onClick={() => setContent('predictions')}>Predictions</button>
+                    <button type="button" className={content === 'betting' ? 'active' : ''} onClick={() => setContent('betting')}>Betting</button>
+                </nav>
+                <div className="dashboard-menu dashboard-menu--secondary">
+                    <label className="season-select">
+                        <span>Season</span>
+                        <select value={selectedSeason} onChange={(e) => setSelectedSeason(e.target.value)}>
+                            {seasonOptions.map((season) => (
+                                <option key={season.key} value={season.key}>
+                                    {season.label}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+                    <button type="button" onClick={() => navigate("/")}>Logout</button>
+                </div>
+            </header>
+
+            {/* <section className="dashboard-hero glass-panel">
+                <div>
+                    <h1 className="section-title">Everything around IPL {selectedSeason}, in one sharper matchday view.</h1>
+                    <p className="section-copy">
+                        Move across fixtures, table momentum, AI-powered predictions, and betting actions with a
+                        cleaner interface built for desktop and mobile.
+                    </p>
+                </div>
+                <div className="dashboard-hero__stats">
+                    <div className="stat-chip">
+                        <strong>{schedule?.length || 0}</strong>
+                        <span>Matches loaded</span>
+                    </div>
+                    <div className="stat-chip">
+                        <strong>{pointsTable?.length || 0}</strong>
+                        <span>Teams ranked</span>
+                    </div>
+                    <div className="stat-chip">
+                        <strong>{presentMatches?.length || 0}</strong>
+                        <span>Today's fixtures</span>
+                    </div>
+                </div>
+            </section> */}
+
+            <div className="dashboard-content">
                 {renderContent()}
-            </Container>
-        </>
+            </div>
+        </div>
     );
 }
 

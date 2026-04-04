@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import './MatchInfo.css';
 import MatchCountdown from './MatchCountdown';
 import HeadToHead from './HeadToHead'; // Adjust path if it's in a different folder
 
+const API_BASE_URL = "https://reactipl2025backend.vercel.app/api";
+
 const MatchInfo = () => {
     const matchId = window.location.pathname.split('/').pop();
+    const [searchParams] = useSearchParams();
+    const selectedSeason = searchParams.get("season") || localStorage.getItem("selectedSeason") || "2026";
     const [selectedInnings, setSelectedInnings] = useState("Innings1");
     const [matchInfo, setMatchInfo] = useState(null);
 
@@ -12,7 +17,7 @@ const MatchInfo = () => {
         const intervalId = setInterval(() => {
             async function fetchMatchData() {
                 try {
-                    const response = await fetch(`https://reactipl2025backend.vercel.app/api/iplscore/${matchId}`);
+                    const response = await fetch(`${API_BASE_URL}/iplscore/${matchId}?season=${selectedSeason}`);
                     const data = await response.json();
                     setMatchInfo(data);
                 } catch (err) {
@@ -24,7 +29,7 @@ const MatchInfo = () => {
         }, 1000);
 
         return () => clearInterval(intervalId);
-    }, [matchId]);
+    }, [matchId, selectedSeason]);
 
 
     const innings =

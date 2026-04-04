@@ -1,180 +1,56 @@
-/* General styles for the App */
-.App {
-  font-family: Arial, sans-serif;
-  /* text-align: center; */
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
 }
 
-/* General Styling */
-body {
-  font-family: "Poppins", sans-serif, 'Arial';
-  /* background: linear-gradient(to right, #141e30, #243b55); */
-  /* color: white; */
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://sdmntprwestus.oaiusercontent.com/files/00000000-632c-5230-80d8-637c21e353a2/raw?se=2025-04-04T07%3A50%3A06Z&sp=r&sv=2024-08-04&sr=b&scid=a3dada87-7ae8-58d5-bd54-9f6126b842b7&skoid=72d71449-cf2f-4f10-a498-f160460104ee&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-04-03T20%3A36%3A18Z&ske=2025-04-04T20%3A36%3A18Z&sks=b&skv=2024-08-04&sig=533TuFwl0dBWoEwl%2BoYcpqfajmgp5kT5ajYKOxveKmc%3D');
-  /* background-size: cover; */
-  background-position: center;  
-  /* background-repeat: no-repeat; */
-  background-size: contain;
-  /* background-image: url("https://sdmntprwestus.oaiusercontent.com/files/00000000-632c-5230-80d8-637c21e353a2/raw?se=2025-04-04T07%3A50%3A06Z&sp=r&sv=2024-08-04&sr=b&scid=a3dada87-7ae8-58d5-bd54-9f6126b842b7&skoid=72d71449-cf2f-4f10-a498-f160460104ee&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-04-03T20%3A36%3A18Z&ske=2025-04-04T20%3A36%3A18Z&sks=b&skv=2024-08-04&sig=533TuFwl0dBWoEwl%2BoYcpqfajmgp5kT5ajYKOxveKmc%3D");
-  background-repeat: no-repeat;
-  background-size: cover; */
-  /* opacity: 5.0; */
-  /* background-position: center; */
-
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  color: #fff;
+.app-shell__content {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
 }
 
-/* Header for the navigation bar */
-.header {
-  background-color: #333;
-  color: white;
-  padding: 15px 0;
-  display: flex;
-  justify-content: center;
-  gap: 30px;
+.app-shell__orb {
+  position: fixed;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(18px);
+  opacity: 0.45;
+  pointer-events: none;
 }
 
-/* Style for individual tabs */
-.tab {
-  cursor: pointer;
-  padding: 10px 20px;
-  font-size: 1.2em;
-  font-weight: bold;
-  text-transform: uppercase;
-  border-radius: 5px;
-  transition: background-color 0.3s;
+.app-shell__orb--gold {
+  top: -6rem;
+  right: -2rem;
+  width: 22rem;
+  height: 22rem;
+  background: radial-gradient(circle, rgba(255, 198, 90, 0.7), rgba(255, 198, 90, 0));
 }
 
-/* Style for active tab */
-.tab.active {
-  background-color: #e91e63;
-  color: white;
+.app-shell__orb--blue {
+  bottom: 5rem;
+  left: -4rem;
+  width: 26rem;
+  height: 26rem;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.55), rgba(56, 189, 248, 0));
 }
 
-/* Hover effect for tabs */
-.tab:hover {
-  background-color: #555;
-  color: white;
+.app-shell__orb--teal {
+  top: 35%;
+  left: 45%;
+  width: 18rem;
+  height: 18rem;
+  background: radial-gradient(circle, rgba(45, 212, 191, 0.4), rgba(45, 212, 191, 0));
 }
 
-/* Main content container */
-/* Main content container */
-.content {
-  /* background-color: #e91e63; */
-  margin-top: 10px;
-  padding: 20px;
-}
-
-/* Navbar container */
-.navbar {
-  display: flex;
-  flex-wrap: wrap;
-  /* justify-content: space-between; */
-  /* align-items: center; */
-  background-color: #444;
-  padding: 10px 20px;
-  color: white;
-}
-
-/* Navbar logo */
-.navbar-logo {
-  font-size: 1.5em;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-/* Navbar links container */
-.navbar-links {
-  display: flex;
-  gap: 15px;
-}
-
-/* Navbar link styles */
-.navbar-link {
-  color: white;
-  text-decoration: none;
-  font-size: 1em;
-  transition: color 0.3s;
-}
-
-.navbar-link:hover {
-  color: #e91e63;
-}
-
-/* Responsive navbar */
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .navbar-links {
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-  }
-
-  .navbar-link {
-    text-align: left;
-    width: 100%;
-  }
-}
-/* Navbar title */
-.navbar-title {
-  font-size: 1.8em;
-  font-weight: bold;
-  color: #e91e63;
-  margin: 0;
-}
-
-/* Navbar menu container */
-.navbar-menu {
-  display: flex;
-  gap: 20px;
-}
-
-/* Navbar item styles */
-.navbar-item {
-  cursor: pointer;
-  padding: 10px 15px;
-  font-size: 1em;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: white;
-  border-radius: 5px;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.navbar-item.active {
-  background-color: #e91e63;
-  color: white;
-}
-
-.navbar-item:hover {
-  background-color: #555;
-  color: white;
-}
-
-/* Responsive navbar adjustments */
-@media (max-width: 768px) {
-  .navbar-menu {
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-  }
-
-  .navbar-item {
-    text-align: center;
-    width: 100%;
-  }
-
-  .navbar-title {
-    text-align: center;
-    margin-bottom: 10px;
-  }
+.app-shell__grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(circle at center, black 35%, transparent 88%);
 }

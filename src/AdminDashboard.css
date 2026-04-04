@@ -1,6 +1,12 @@
 .admin-dashboard {
   padding: 2rem;
-  color: #fff;
+  color: var(--text-primary);
+  width: min(1180px, calc(100% - 2rem));
+  margin: 2rem auto;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-soft);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(15, 23, 42, 0.66));
+  box-shadow: var(--shadow-lg);
 }
 .admin-table {
   width: 100%;
@@ -8,14 +14,14 @@
 }
 .admin-table th,
 .admin-table td {
-  border: 1px solid #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 12px;
   text-align: center;
-  color: #fff;
+  color: var(--text-primary);
 }
 .admin-table th {
-  background-color: #1e3a8a;
-  color: white;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
 }
 @media (max-width: 768px) {
   .admin-table {
@@ -28,15 +34,21 @@
   padding: 20px;
   gap: 20px;
 }
-.admin-button {
-  background-color: #1e3a8a;
-  color: white;
+.admin-button,
+.view-buttons button,
+.logout-button {
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-teal));
+  color: #04111f;
   padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 999px;
   cursor: pointer;
   margin: 0 5px;
+  font-weight: 700;
 }
-.admin-button:hover {
-  background-color: #2563eb;
+
+.admin-button:hover,
+.view-buttons button:hover,
+.logout-button:hover {
+  filter: brightness(1.05);
 }

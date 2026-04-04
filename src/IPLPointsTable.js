@@ -1,5 +1,4 @@
 import React from "react";
-import Table from "react-bootstrap/Table";
 import "./IplPointsTable.css"; // Add custom styles here
 
 const IplPointsTable = ({ points }) => {
@@ -7,8 +6,8 @@ const IplPointsTable = ({ points }) => {
     return <div>No points data available.</div>;
   }
   return (
-    <div className="container-fluid">
-        <Table bordered hover striped className="points-table">
+    <div className="container">
+        <table className="points-table">
           <thead>
             <tr>
               <th>POS</th>
@@ -60,7 +59,7 @@ const IplPointsTable = ({ points }) => {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </table>
     </div>
   );
 };
