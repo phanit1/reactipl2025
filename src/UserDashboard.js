@@ -16,6 +16,7 @@ const DEFAULT_SEASON = "2026";
 
 function UserDashboard() {
     const [content, setContent] = useState('home');
+    const [isNavOpen, setIsNavOpen] = useState(false);
     const [seasonOptions, setSeasonOptions] = useState(FALLBACK_SEASONS);
     const [selectedSeason, setSelectedSeason] = useState(
         localStorage.getItem("selectedSeason") || DEFAULT_SEASON
@@ -63,6 +64,10 @@ function UserDashboard() {
     useEffect(() => {
         localStorage.setItem("selectedSeason", selectedSeason);
     }, [selectedSeason]);
+
+    useEffect(() => {
+        setIsNavOpen(false);
+    }, [content, selectedSeason]);
 
     useEffect(() => {
         async function fetchSeasonMatches() {
@@ -163,6 +168,18 @@ function UserDashboard() {
                         <small>Modern match intelligence</small>
                     </span>
                 </button>
+                <button
+                    type="button"
+                    className="dashboard-nav__toggle"
+                    aria-expanded={isNavOpen}
+                    aria-label="Toggle navigation"
+                    onClick={() => setIsNavOpen((prev) => !prev)}
+                >
+                    <span />
+                    <span />
+                    <span />
+                </button>
+                <div className={`dashboard-nav__panel ${isNavOpen ? 'is-open' : ''}`}>
                 <nav className="dashboard-menu" aria-label="Dashboard sections">
                     <button type="button" className={content === 'schedule' ? 'active' : ''} onClick={() => setContent('schedule')}>Schedule</button>
                     <button type="button" className={content === 'points' ? 'active' : ''} onClick={() => setContent('points')}>Points Table</button>
@@ -181,6 +198,7 @@ function UserDashboard() {
                         </select>
                     </label>
                     <button type="button" onClick={() => navigate("/")}>Logout</button>
+                </div>
                 </div>
             </header>
 

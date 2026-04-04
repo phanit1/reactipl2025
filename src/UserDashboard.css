@@ -12,6 +12,36 @@
   margin-bottom: 1.25rem;
 }
 
+.dashboard-nav__toggle {
+  display: none;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.dashboard-nav__toggle span {
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--text-primary);
+}
+
+.dashboard-nav__panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  gap: 1rem;
+}
+
 .dashboard-brand {
   display: inline-flex;
   align-items: center;
@@ -124,6 +154,7 @@
 
 .dashboard-menu--secondary {
   align-items: center;
+  margin-left: auto;
 }
 
 .season-select {
@@ -153,14 +184,50 @@
   .home-hero {
     grid-template-columns: 1fr;
   }
+}
 
+@media (max-width: 860px) {
   .dashboard-nav {
+    align-items: center;
+  }
+
+  .dashboard-nav__toggle {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .dashboard-nav__panel {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+    padding-top: 0.5rem;
+  }
+
+  .dashboard-nav__panel.is-open {
+    display: flex;
+  }
+
+  .dashboard-menu,
+  .dashboard-menu--secondary {
+    width: 100%;
     flex-direction: column;
     align-items: stretch;
   }
 
+  .dashboard-menu button {
+    width: 100%;
+    text-align: left;
+    border-radius: 16px;
+  }
+
   .dashboard-menu--secondary {
-    justify-content: flex-start;
+    margin-left: 0;
+  }
+
+  .season-select {
+    width: 100%;
   }
 }
 
